@@ -44,6 +44,7 @@ function ProcessUserCreation {
         [string]$UserID,
         [string]$givenName,
         [string]$lastName,
+        [string]$gender,
         [string]$Buro,
         [string]$Rufnummer,
         [string]$Handynummer,
@@ -569,53 +570,20 @@ function ProcessUserCreation {
     if ($ProgressCallback) { & $ProgressCallback 85 }
 
     # ------------------------------------------------
-    # Schritt 14: ExtensionAttributes (VIP, IVBB, usw.)
-    WriteJobLog "Setze ExtensionAttributes für $UserID (IVBB=$isIVBB, VIP=$isVIP, Gender=$gender...)"
+    # Schritt 14: ExtensionAttributes
+    WriteJobLog "Setze ExtensionAttributes …" "INFO"
     if ($ProgressCallback) { & $ProgressCallback 87 }
 
-    $extHash = @{}
-    if ($isIVBB -eq "j")        { $extHash["extensionAttribute3"]  = "IVBB" }
-    if ($isGVPL -eq "j")        { $extHash["extensionAttribute13"] = "x" }
-    if ($isPhonebook -eq $true) { $extHash["extensionAttribute14"] = "x" }
-    if ($isResMailbox -eq "j")  { $extHash["extensionAttribute7"]  = "ResourceMB" }
-    if ($isExternAccount -eq "j") { $extHash["extensionAttribute11"] = "x" }
-
-    # Handle gender-specific attributes
-    switch ($gender) {
-        "Mann" {
-            $extHash["extensionAttribute4"] = "Herr"
-        }
-        "Frau" {
-            $extHash["extensionAttribute4"] = "Frau"
-        }
-        "Divers" {
-            $extHash["extensionAttribute4"] = ""
-        }
-        "Nicht natürliche Person (NNP)" {
-            $extHash["extensionAttribute5"] = "1"
-        }
-    }
-
-    if ($extHash.Count -gt 0) {
-        try {
-            Set-ADUser -Identity $UserID -Replace $extHash -ErrorAction Stop
-            WriteJobLog "ExtensionAttributes für $UserID gesetzt: $($extHash.Keys -join ', ')"
-        }
-        catch {
-            WriteJobLog "Fehler beim Setzen der ExtensionAttributes: $($_.Exception.Message)" "ERROR"
-        }
-    }
-
-    # VIP gesondert als pager
-    if ($isVIP -eq "j") {
-        try {
-            Set-ADUser -Identity $UserID -Add @{ pager="VIP" } -ErrorAction Stop
-            WriteJobLog "VIP-Status (Quota) gesetzt für $UserID."
-        }
-        catch {
-            WriteJobLog "Fehler beim Setzen des VIP-Status: $($_.Exception.Message)" "WARN"
-        }
-    }
+    Set-ExtensionAttributes `
+        -UserID          $UserID `
+        -gender          $gender `
+        -isIVBB          $isIVBB `
+        -isGVPL          $isGVPL `
+        -isPhonebook     $isPhonebook `
+        -isResMailbox    $isResMailbox `
+        -isExternAccount $isExternAccount `
+        -isVIP           $isVIP `
+        -isFutureUser    $false
 
     # Schritt 14: abgeschlossen
     if ($ProgressCallback) { & $ProgressCallback 90 }

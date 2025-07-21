@@ -8,7 +8,7 @@ function new-ADAccountSettings {
         [Parameter(Mandatory=$false)][string]$userDescription = ""
     )
 
-    MyWrite-Log "new-ADAccountSettings für $newUserID" -Color "blue"
+    MyWrite-Log "new-ADAccountSettings fÃ¼r $newUserID" -Color "blue"
 
     $UserDisplayName   = if ($lastName -and $givenName) { "$lastName, $givenName" } else { $newUserID }
     $userLoginPassword = "BmuB_$(Get-Date -Format ddHHmm)"
@@ -36,7 +36,7 @@ function new-ADAccountSettings {
         "$($newUserData.UserloginName) : $userLoginPassword" | Out-File -FilePath $global:AppConfig.LogInLog -Append
     }
 
-    MyWrite-Log "new-ADAccountSettings - Datenobjekt erstellt für $newUserID" -Color "green"
+    MyWrite-Log "new-ADAccountSettings - Datenobjekt erstellt fÃ¼r $newUserID" -Color "green"
     return $newUserData
 }
 
@@ -88,7 +88,7 @@ function Set-ConetDisplayName {
                 MyWrite-Log "CN (Common Name) mit 'CONET ' erweitert: $newDisp" -Color "green"
             }
             catch {
-                MyWrite-Log "Fehler beim Ändern des CN: $_" -Color "red"
+                MyWrite-Log "Fehler beim Ã„ndern des CN: $_" -Color "red"
             }
         }
     }
@@ -101,7 +101,7 @@ Export-ModuleMember -Function new-ADAccountSettings, Set-NewADAccount, Set-Conet
 
 function Std-Attributes {
     param([Parameter(Mandatory=$true)]$userAttributes)
-    MyWrite-Log "Std-Attributes für $($userAttributes.id)" -Color "blue"
+    MyWrite-Log "Std-Attributes fÃ¼r $($userAttributes.id)" -Color "blue"
     $stdparams = @{
         "ID"                   = $userAttributes.id
         "extensionAttribute13" = "x"
@@ -143,7 +143,59 @@ function check-date {
             return $true
         }
         catch {
-            MyWrite-Log "Ungültiges Datum: $date" -Color "red"
+# Set-ExtensionAttributes
+function Set-ExtensionAttributes {
+    param(
+        [string]$UserID,
+        [string]$gender,
+        [string]$isIVBB,
+        [string]$isGVPL,
+        [bool]  $isPhonebook,
+        [string]$isResMailbox,
+        [string]$isExternAccount,
+        [string]$isVIP,
+        [bool]  $isFutureUser = $false
+    )
+
+    $ext = @{}
+
+    if ($isIVBB  -eq 'j') { $ext.extensionAttribute3  = 'IVBB' }
+    if ($isGVPL  -eq 'j' -and -not $isFutureUser) { $ext.extensionAttribute13 = 'x' }
+    if ($isPhonebook      -and -not $isFutureUser) { $ext.extensionAttribute14 = 'x' }
+    if ($isResMailbox -eq 'j') { $ext.extensionAttribute7  = 'ResourceMB' }
+    if ($isExternAccount -eq 'j') { $ext.extensionAttribute11 = 'x' }
+
+    if ($isFutureUser) {
+        $ext.extensionAttribute13 = 'x'
+        $ext.extensionAttribute14 = 'x'
+    }
+
+    switch ($gender) {
+        'Mann'  { $ext.extensionAttribute4 = 'Herr' }
+        'Frau'  { $ext.extensionAttribute4 = 'Frau' }
+        'Divers'{ $ext.extensionAttribute4 = ''     }
+        'Nicht nat\xFCrliche Person (NNP)' {
+            $ext.extensionAttribute4 = ''
+            $ext.extensionAttribute5 = '1'
+        }
+    }
+
+    if ($ext.Count) {
+        Set-ADUser -Identity $UserID -Replace $ext -ErrorAction Stop
+        WriteJobLog "ExtensionAttributes gesetzt: $($ext.Keys -join ', ')" "SUCCESS"
+    }
+
+    if ($isVIP -eq 'j') {
+        try {
+            Set-ADUser -Identity $UserID -Add @{ pager = 'VIP' } -ErrorAction Stop
+            WriteJobLog "VIP (Quota) gesetzt." "INFO"
+        } catch {
+            WriteJobLog "Fehler VIP: $($_.Exception.Message)" "WARN"
+        }
+    }
+}
+
+Export-ModuleMember -Function Std-Attributes, Set-ADExAttributes, check-date, set-attributes, Set-ExtensionAttributes
             return $false
         }
     }
