@@ -646,7 +646,7 @@ $btnStart.Add_Click({
         isGVPL = if ($chkGVPL.IsChecked) { "j" } else { "n" }
         isPhonebook = $chkPhonebook.IsChecked
         isVIP = if ($chkVIP.IsChecked) { "j" } else { "n" }
-        $gender = if ($comboGender.SelectedItem) { $comboGender.SelectedItem.Content } else { "Mann" }
+        gender = if ($comboGender.SelectedItem) { $comboGender.SelectedItem.Content } else { "Mann" }
         #isFemale = if ($gender -eq "Frau") { "j" } else { "n" }
         isAbgeordnet = if ($chkAbgeordnet.IsChecked) { "j" } else { "n" }
         isNatPerson = if ($chkNatPerson.IsChecked) { "j" } else { "n" }
