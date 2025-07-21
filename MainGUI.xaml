@@ -1,0 +1,180 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add-User"
+		Icon="\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\ToolBox\Res\conet.ico"
+		Height="860" Width="1400"
+        Background="#E0ECF8" Foreground="Black"
+        WindowStartupLocation="CenterScreen">
+  <DockPanel LastChildFill="True">
+    <StatusBar DockPanel.Dock="Bottom">
+      <StatusBarItem>
+        <TextBlock x:Name="statusText" Text="Bereit"/>
+      </StatusBarItem>
+    </StatusBar>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="250"/>
+        <ColumnDefinition Width="250"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      
+      <!-- Linke Spalte -->
+      <StackPanel Grid.Column="0" Margin="20,20,0,0">
+        <Label Content="UserID/SAM-Account (Pflicht):"/>
+        <TextBox x:Name="txtUser" Width="200" ToolTip="Eindeutige ID (z. B. mmuster), maximal 20 Zeichen"/>
+        <Label Content="Geschlecht:"/>
+		<ComboBox x:Name="comboGender" Width="200" ToolTip="Wählen Sie das Geschlecht">
+		  <ComboBoxItem Content="Mann" IsSelected="True"/>
+		  <ComboBoxItem Content="Frau"/>
+		  <ComboBoxItem Content="Divers"/>
+		  <ComboBoxItem Content="Nicht natürliche Person (NNP)"/>
+		</ComboBox>
+        <Label Content="Vorname (Optional):"/>
+        <TextBox x:Name="txtGivenName" Width="200" ToolTip="Vorname (z. B. Max)"/>
+        <Label Content="Nachname (Optional):"/>
+        <TextBox x:Name="txtLastName" Width="200" ToolTip="Nachname (z. B. Muster)"/>
+        <Label Content="Büro (Optional):"/>
+        <TextBox x:Name="txtBuro" Width="200" ToolTip="Büronummer (z. B. bei 0.310 RSP/STR/KTR/ wird automatisch gesetzt)"/>
+        <Label Content="Site auswählen (Pflicht):"/>
+        <ComboBox x:Name="comboSite" Width="200" ToolTip="RSP = Bonn, STR = Berlin, KTR = Köthen">
+          <ComboBoxItem>RSP</ComboBoxItem>
+          <ComboBoxItem>STR</ComboBoxItem>
+          <ComboBoxItem>KTR</ComboBoxItem>
+        </ComboBox>
+        <Label Content="Rufnummer (Optional):"/>
+        <TextBox x:Name="txtRufnummer" Width="200" ToolTip="Format: +49..."/>
+        <Label Content="Handynummer (Optional):"/>
+        <TextBox x:Name="txtHandynummer" Width="200" ToolTip="Format: +49..."/>
+        <Label Content="Titel (Optional):"/>
+        <TextBox x:Name="txtTitle" Width="200" ToolTip="z. B. Dr., Prof."/>
+        <Label Content="Amtsbezeichnung (Optional):"/>
+        <ComboBox x:Name="comboAmts" Width="200" IsEditable="True" ToolTip="z. B. Mitarbeiter"/>
+        <Label Content="Laufbahngruppe (Optional):"/>
+        <ComboBox x:Name="comboLauf" Width="200" IsEditable="True" ToolTip="z. B. Mittel, Höher"/>
+        <!-- Logo -->
+        <Image x:Name="imgLogo" Width="200" Height="100" Stretch="Fill" Margin="0,20,0,0" ToolTip="BMUV-Logo"/>
+        <!-- Standardprofil -->
+        <Label Content="Standardprofil:" Margin="0,10,0,0"/>
+        <ComboBox x:Name="comboStdProfile" Width="200" SelectedIndex="-1" ToolTip="Vordefiniertes Profil">
+          <ComboBoxItem Content=""/>
+          <ComboBoxItem Content="Mann Bonn"/>
+          <ComboBoxItem Content="Mann Berlin"/>
+          <ComboBoxItem Content="Frau Bonn"/>
+          <ComboBoxItem Content="Frau Berlin"/>
+          <ComboBoxItem Content="Admin Bonn"/>
+          <ComboBoxItem Content="Admin Berlin"/>
+        </ComboBox>
+        <!-- Massen-Erstellung -->
+        <Button x:Name="btnMassCreation" Content="Massen Erstellung" Width="140" Margin="0,10,0,0" ToolTip="Erstellt mehrere Benutzer"/>
+      </StackPanel>
+      
+      <!-- Mittlere Spalte -->
+      <StackPanel Grid.Column="1" Margin="20,20,0,0">
+        <Label Content="Department / Referat:"/>
+        <ComboBox x:Name="comboDept" Width="200" IsEditable="True" ToolTip="z. B. IT, Personal"/>
+        <Label Content="Befristet bis (DD.MM.YYYY oder 'U'):"/>
+        <TextBox x:Name="txtExp" Width="200" ToolTip="z. B. 31.12.2025 oder 'U'"/>
+        <Label Content="Aktivierungsdatum(DD.MM.YYYY oder 'S'):"/>
+        <TextBox x:Name="txtAktiv" Width="200" ToolTip="z. B. 01.01.2024 oder 'S'"/>
+        <Label Content="Ticketnummer (Pflicht):"/>
+        <TextBox x:Name="txtTicket" Width="200" ToolTip="z. B. T12345"/>
+        <Label Content="Rolle (Optional):"/>
+        <ComboBox x:Name="comboRolle" Width="200" ToolTip="z. B. Praktikant, Azubi">
+          <ComboBoxItem Content=""/>
+          <ComboBoxItem>Praktikant</ComboBoxItem>
+          <ComboBoxItem>Hospitant</ComboBoxItem>
+          <ComboBoxItem>Azubi</ComboBoxItem>
+        </ComboBox>
+        <Label Content="Funktion (Optional):"/>
+        <ComboBox x:Name="comboFunktion" Width="200" IsEditable="True" ToolTip="z. B. Teamleiter"/>
+        <Label Content="Sonderkennzeichnung (Optional):"/>
+        <ComboBox x:Name="comboSonder" Width="200" IsEditable="True" ToolTip="z. B. Extern"/>
+        <Label Content="Beschreibung (Optional):"/>
+        <TextBox x:Name="txtDesc" Width="200" Height="50" AcceptsReturn="True" ToolTip="Zusätzliche Infos"/>
+      </StackPanel>
+      
+      <!-- Rechte Spalte -->
+      <StackPanel Grid.Column="2" Margin="20,20,20,0">
+        <GroupBox Header="Zusätzliche Gruppen" Height="300">
+          <StackPanel>
+            <ListBox x:Name="lstGroups" Height="200" Margin="0,5"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ToolTip="Wähle zusätzliche AD-Gruppen">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}"/>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+            
+            <!-- Split-Button für Gruppensuche -->
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <!-- Haupt-Button -->
+                <Button x:Name="btnSearchGroups" Content="Gruppen suchen" Width="90" Grid.Column="0"
+                        ToolTip="Suche nach AD-Gruppen basierend auf Department"/>
+                <!-- Dropdown-Button -->
+                <Button x:Name="btnSearchGroups_DropDown" Content="▼" Width="30" Grid.Column="1"
+                        ToolTip="Erweiterte Suchkriterien öffnen"/>
+              </Grid>
+              <Label Content="Referenz-Benutzer:" Margin="10,0,0,0"/>
+              <TextBox x:Name="txtRefUser" Width="180"
+                       ToolTip="SAM-Account eines bestehenden Benutzers"/>
+            </StackPanel>
+          </StackPanel>
+        </GroupBox>
+        
+        <Grid Margin="0,20,0,0">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          
+          <GroupBox Header="Account Optionen" Grid.Column="0">
+            <StackPanel>
+              <CheckBox x:Name="chkIVBB" Content="IVBB" ToolTip="Interessenvertretung"/>
+              <CheckBox x:Name="chkGVPL" Content="nicht im GVPL" ToolTip="Nicht im globalen Verzeichnis"/>
+              <CheckBox x:Name="chkPhonebook" Content="nicht Telefonbuch" ToolTip="Nicht im Intranet-Telefonbuch"/>
+              <CheckBox x:Name="chkVIP" Content="VIP (Sonder-Quota)" ToolTip="Sonder-Quota"/>
+              <!-- Die alte Checkbox für "Nutzerin" wurde entfernt -->
+              <CheckBox x:Name="chkAbgeordnet" Content="Abgeordnet" ToolTip="Abgeordnet"/>
+              <CheckBox x:Name="chkConet" Content="CONET" ToolTip="CONET-Kennzeichnung"/>
+              <CheckBox x:Name="chkExternAccount" Content="Extern (Account)" ToolTip="Externes Konto"/>
+            </StackPanel>
+          </GroupBox>
+          
+          <GroupBox Header="Mail Optionen" Grid.Column="1">
+            <StackPanel>
+              <CheckBox x:Name="chkMailbox" Content="Mailbox anlegen" ToolTip="Mailbox erstellen"/>
+              <CheckBox x:Name="chkExtern" Content="Extern" ToolTip="Mailbox extern"/>
+              <CheckBox x:Name="chkVerstecken" Content="Verstecken" IsChecked="True" ToolTip="Im Adressbuch verstecken"/>
+              <CheckBox x:Name="chkResMailbox" Content="Resourcen Mailbox" ToolTip="Ressourcen-Mailbox erstellen"/>
+            </StackPanel>
+          </GroupBox>
+        </Grid>
+        
+        <Label Content="Log:" Margin="0,20,0,0"/>
+        <RichTextBox x:Name="txtLog" Height="120" IsReadOnly="True"
+                     VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                     ToolTip="Verlauf der Aktionen wird hier live angezeigt"/>
+        
+        <Label Content="Fortschritt:" Margin="0,10,0,0"/>
+        <ProgressBar x:Name="progressBar" Height="20" Minimum="0" Maximum="100" ToolTip="Fortschritt der Benutzererstellung"/>
+        
+        <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+          <Button x:Name="btnStart" Content="Ausführen" Width="100" ToolTip="Startet die Erstellung (Strg+S)"/>
+          <Button x:Name="btnCancel" Content="Abbrechen" Width="100" ToolTip="Bricht die Aktion ab (Esc)" Margin="10,0,0,0"/>
+          <Button x:Name="btnExit" Content="Beenden" Width="100" ToolTip="Schließt die Anwendung" Margin="10,0,0,0"/>
+          <Button x:Name="btnCopyLog" Content="Log kopieren" Width="120" IsEnabled="False" ToolTip="Log in Zwischenablage kopieren" Margin="10,0,0,0"/>
+          <Button x:Name="btnNewUser" Content="Neuer Benutzer" Width="120" ToolTip="Setzt alle Felder zurück (Strg+N)" Margin="10,0,0,0"/>
+          <Button x:Name="btnSaveProfile" Content="Profil speichern" Width="120" ToolTip="Speichert das Profil" Margin="10,0,0,0"/>
+          <Button x:Name="btnLoadProfile" Content="Profil laden" Width="120" ToolTip="Lädt ein gespeichertes Profil" Margin="10,0,0,0"/>
+        </StackPanel>
+      </StackPanel>
+    </Grid>
+  </DockPanel>
+</Window>

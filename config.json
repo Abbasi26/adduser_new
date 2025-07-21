@@ -1,0 +1,27 @@
+{
+    "Paths": {
+        "LogPath": "\\\\rspsvtask01.office.dir\\c$\\Scripte\\Accounting-Logs\\Log\\activateAccountLog.txt",
+        "FilePath": "\\\\rspsvtask01.office.dir\\c$\\Scripte\\Accounting-Logs\\Data\\activateAccount.dat",
+        "XMLLogPath": "\\\\rspsvtask01.office.dir\\c$\\Scripte\\Accounting-Logs\\Log\\activateAccountLog.log",
+        "LogInLog": "\\\\rspsvtask01.office.dir\\c$\\Scripte\\Accounting-Logs\\Log\\LoginLog.txt",
+        "AmtsPath": "\\\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v20\\amtsbezeichnungen.json",
+        "LaufPath": "\\\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v20\\laufbahnen.json",
+        "FktPath": "\\\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v20\\Funktionen.json",
+        "SonderPath": "\\\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v20\\sonder.json",
+        "DeptsLongOG": "\\\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v20\\departments_long_oggroups.json",
+        "Depts2Json": "\\\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v20\\departments2.json",
+        "MainGUIXaml": "\\\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\MainGUI.xaml",
+        "PreviewWindowXaml": "\\\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\PreviewWindow.xaml",
+        "MassPreviewWindowXaml": "\\\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\MassPreviewWindow.xaml"
+    },
+    "Modules": [
+        "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\LogModule.psm1",
+        "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\ADUserCreationModule.psm1",
+        "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\DatabaseModule.psm1",
+        "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\AttributeModule.psm1",
+        "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\MailboxModule.psm1",
+        "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\FolderStructureModule.psm1",
+        "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\UserCreationLogic2.psm1"
+    ],
+    "MaxGroupsToLoad": 100
+}

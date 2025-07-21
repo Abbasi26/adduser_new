@@ -1,0 +1,1098 @@
+﻿[
+    {
+        "Department":  "BM",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "C",
+        "OGGroup":  "OG-C"
+    },
+    {
+        "Department":  "C I",
+        "OGGroup":  "OG-C-I"
+    },
+    {
+        "Department":  "C I 1",
+        "OGGroup":  "OG-C-I-1"
+    },
+    {
+        "Department":  "C I 2",
+        "OGGroup":  "OG-C-I-2"
+    },
+    {
+        "Department":  "C I 3",
+        "OGGroup":  "OG-C-I-3"
+    },
+    {
+        "Department":  "C I 3 / C I 6",
+        "OGGroup":  "OG-C-I-3; OG-C-I-6"
+    },
+    {
+        "Department":  "C I 4",
+        "OGGroup":  "OG-C-I-4"
+    },
+    {
+        "Department":  "C I 5",
+        "OGGroup":  "OG-C-I-5"
+    },
+    {
+        "Department":  "C I 5 / C I 6",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "C I 6",
+        "OGGroup":  "OG-C-I-6"
+    },
+    {
+        "Department":  "C II",
+        "OGGroup":  "OG-C-II"
+    },
+    {
+        "Department":  "C II 1",
+        "OGGroup":  "OG-C-II-1"
+    },
+    {
+        "Department":  "C II 2",
+        "OGGroup":  "OG-C-II-2"
+    },
+    {
+        "Department":  "C II 3",
+        "OGGroup":  "OG-C-II-3"
+    },
+    {
+        "Department":  "C II 4",
+        "OGGroup":  "OG-C-II-4"
+    },
+    {
+        "Department":  "C II 5",
+        "OGGroup":  "OG-C-II-5"
+    },
+    {
+        "Department":  "C II 6",
+        "OGGroup":  "OG-C-II-6"
+    },
+    {
+        "Department":  "G",
+        "OGGroup":  "OG-G"
+    },
+    {
+        "Department":  "G I",
+        "OGGroup":  "OG-G-I"
+    },
+    {
+        "Department":  "G I 1",
+        "OGGroup":  "OG-G-I-1"
+    },
+    {
+        "Department":  "G I 2",
+        "OGGroup":  "OG-G-I-2"
+    },
+    {
+        "Department":  "G I 2 / G I 3",
+        "OGGroup":  "OG-G-I-2; OG-G-I-3"
+    },
+    {
+        "Department":  "G I 2 / G II 3",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "G I 2 / T III 4",
+        "OGGroup":  "OG-G-I-2; OG-T-III-4"
+    },
+    {
+        "Department":  "G I 3",
+        "OGGroup":  "OG-G-I-3"
+    },
+    {
+        "Department":  "G I 4",
+        "OGGroup":  "OG-G-I-4"
+    },
+    {
+        "Department":  "G I 5",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "G I 6",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "G II",
+        "OGGroup":  "OG-G-II"
+    },
+    {
+        "Department":  "G II 1",
+        "OGGroup":  "OG-G-II-1"
+    },
+    {
+        "Department":  "G II 2",
+        "OGGroup":  "OG-G-II-2"
+    },
+    {
+        "Department":  "G II 3",
+        "OGGroup":  "OG-G-II-3"
+    },
+    {
+        "Department":  "G II 4",
+        "OGGroup":  "OG-G-II-4"
+    },
+    {
+        "Department":  "G II 5",
+        "OGGroup":  "OG-G-II-5"
+    },
+    {
+        "Department":  "G II 6",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "G III",
+        "OGGroup":  "OG-G-III"
+    },
+    {
+        "Department":  "G III / G III 2",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "G III / G III 3",
+        "OGGroup":  "OG-G-III; OG-G-III-3"
+    },
+    {
+        "Department":  "G III / G III 5",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "G III 1",
+        "OGGroup":  "OG-G-III-1"
+    },
+    {
+        "Department":  "G III 2",
+        "OGGroup":  "OG-G-III-2"
+    },
+    {
+        "Department":  "G III 3",
+        "OGGroup":  "OG-G-III-3"
+    },
+    {
+        "Department":  "G III 4",
+        "OGGroup":  "OG-G-III-4"
+    },
+    {
+        "Department":  "G III 5",
+        "OGGroup":  "OG-G-III-5"
+    },
+    {
+        "Department":  "G III 6",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Gleichst.-Beauftr.",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "GSt SVRV",
+        "OGGroup":  "OG-GSt-SVRV"
+    },
+    {
+        "Department":  "HPR",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "HPR, BfN",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "HPR, BfS",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "HPR, Gesch.-St.",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "HPR, Stellv. Vorsitzende",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "HPR, Stellv. Vorsitzender",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "HPR, UBA",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "HPR, Vorsitzende",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "HPR, Vorsitzender",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "I",
+        "OGGroup":  "OG-I"
+    },
+    {
+        "Department":  "I I",
+        "OGGroup":  "OG-I-I"
+    },
+    {
+        "Department":  "I I 1",
+        "OGGroup":  "OG-I-I-1"
+    },
+    {
+        "Department":  "I I 2",
+        "OGGroup":  "OG-I-I-2"
+    },
+    {
+        "Department":  "I I 3",
+        "OGGroup":  "OG-I-I-3"
+    },
+    {
+        "Department":  "I I 4",
+        "OGGroup":  "OG-I-I-4"
+    },
+    {
+        "Department":  "I I 5",
+        "OGGroup":  "OG-I-I-5"
+    },
+    {
+        "Department":  "I II",
+        "OGGroup":  "OG-I-II"
+    },
+    {
+        "Department":  "I II 1",
+        "OGGroup":  "OG-I-II-1"
+    },
+    {
+        "Department":  "I II 2",
+        "OGGroup":  "OG-I-II-2"
+    },
+    {
+        "Department":  "I II 3",
+        "OGGroup":  "OG-I-II-3"
+    },
+    {
+        "Department":  "I II 4",
+        "OGGroup":  "OG-I-II-4"
+    },
+    {
+        "Department":  "IC",
+        "OGGroup":  "OG-IC"
+    },
+    {
+        "Department":  "IT-Beauftragter",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "K",
+        "OGGroup":  "OG-K"
+    },
+    {
+        "Department":  "L",
+        "OGGroup":  "OG-L"
+    },
+    {
+        "Department":  "L / L 3",
+        "OGGroup":  "OG-L; OG-L-3"
+    },
+    {
+        "Department":  "L 1",
+        "OGGroup":  "OG-L-1"
+    },
+    {
+        "Department":  "L 2",
+        "OGGroup":  "OG-L-2"
+    },
+    {
+        "Department":  "L 3",
+        "OGGroup":  "OG-L-3"
+    },
+    {
+        "Department":  "L 4",
+        "OGGroup":  "OG-L-4"
+    },
+    {
+        "Department":  "L 5",
+        "OGGroup":  "OG-L-5"
+    },
+    {
+        "Department":  "N",
+        "OGGroup":  "OG-N"
+    },
+    {
+        "Department":  "N I",
+        "OGGroup":  "OG-N-I"
+    },
+    {
+        "Department":  "N I 1",
+        "OGGroup":  "OG-N-I-1"
+    },
+    {
+        "Department":  "N I 2",
+        "OGGroup":  "OG-N-I-2"
+    },
+    {
+        "Department":  "N I 3",
+        "OGGroup":  "OG-N-I-3"
+    },
+    {
+        "Department":  "N I 4",
+        "OGGroup":  "OG-N-I-4"
+    },
+    {
+        "Department":  "N I 5",
+        "OGGroup":  "OG-N-I-5"
+    },
+    {
+        "Department":  "N II",
+        "OGGroup":  "OG-N-II"
+    },
+    {
+        "Department":  "N II / N II 4",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "N II 1",
+        "OGGroup":  "OG-N-II-1"
+    },
+    {
+        "Department":  "N II 2",
+        "OGGroup":  "OG-N-II-2"
+    },
+    {
+        "Department":  "N II 3",
+        "OGGroup":  "OG-N-II-3"
+    },
+    {
+        "Department":  "N II 4",
+        "OGGroup":  "OG-N-II-4"
+    },
+    {
+        "Department":  "N II 5",
+        "OGGroup":  "OG-N-II-5"
+    },
+    {
+        "Department":  "N III",
+        "OGGroup":  "OG-N-III"
+    },
+    {
+        "Department":  "N III / SB AHP",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "N III 1",
+        "OGGroup":  "OG-N-III-1"
+    },
+    {
+        "Department":  "N III 2",
+        "OGGroup":  "OG-N-III-2"
+    },
+    {
+        "Department":  "N III 3",
+        "OGGroup":  "OG-N-III-3"
+    },
+    {
+        "Department":  "N III 4",
+        "OGGroup":  "OG-N-III-4"
+    },
+    {
+        "Department":  "Personalrat",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Personalrat, Gesch.-St.",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Personalrat, Stellv. Vorsitzender",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Personalrat, Vorsitzende",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Personalrat, Vorsitzender",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "PST G",
+        "OGGroup":  "OG-PST-G"
+    },
+    {
+        "Department":  "PST H",
+        "OGGroup":  "OG-PST-H"
+    },
+    {
+        "Department":  "S",
+        "OGGroup":  "OG-S"
+    },
+    {
+        "Department":  "S I",
+        "OGGroup":  "OG-S-I"
+    },
+    {
+        "Department":  "S I 1",
+        "OGGroup":  "OG-S-I-1"
+    },
+    {
+        "Department":  "S I 2",
+        "OGGroup":  "OG-S-I-2"
+    },
+    {
+        "Department":  "S I 3",
+        "OGGroup":  "OG-S-I-3"
+    },
+    {
+        "Department":  "S I 4",
+        "OGGroup":  "OG-S-I-4"
+    },
+    {
+        "Department":  "S I 4 / Personalrat, Stellv. Vorsitzender",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "S I 4 / S III 4",
+        "OGGroup":  "OG-S-I-4; OG-S-III-4"
+    },
+    {
+        "Department":  "S I 5",
+        "OGGroup":  "OG-S-I-5"
+    },
+    {
+        "Department":  "S I 6",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "S II",
+        "OGGroup":  "OG-S-II"
+    },
+    {
+        "Department":  "S II 1",
+        "OGGroup":  "OG-S-II-1"
+    },
+    {
+        "Department":  "S II 2",
+        "OGGroup":  "OG-S-II-2"
+    },
+    {
+        "Department":  "S II 3",
+        "OGGroup":  "OG-S-II-3"
+    },
+    {
+        "Department":  "S II 4",
+        "OGGroup":  "OG-S-II-4"
+    },
+    {
+        "Department":  "S II 5",
+        "OGGroup":  "OG-S-II-5"
+    },
+    {
+        "Department":  "S II 6",
+        "OGGroup":  "OG-S-II-6"
+    },
+    {
+        "Department":  "S III",
+        "OGGroup":  "OG-S-III"
+    },
+    {
+        "Department":  "S III 1",
+        "OGGroup":  "OG-S-III-1"
+    },
+    {
+        "Department":  "S III 2",
+        "OGGroup":  "OG-S-III-2"
+    },
+    {
+        "Department":  "S III 3",
+        "OGGroup":  "OG-S-III-3"
+    },
+    {
+        "Department":  "S III 4",
+        "OGGroup":  "OG-S-III-4"
+    },
+    {
+        "Department":  "SB AHP",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "SBV",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "ST R",
+        "OGGroup":  "OG-ST-R"
+    },
+    {
+        "Department":  "ST T",
+        "OGGroup":  "OG-ST-T"
+    },
+    {
+        "Department":  "T",
+        "OGGroup":  "OG-T"
+    },
+    {
+        "Department":  "T I",
+        "OGGroup":  "OG-T-I"
+    },
+    {
+        "Department":  "T I 1",
+        "OGGroup":  "OG-T-I-1"
+    },
+    {
+        "Department":  "T I 2",
+        "OGGroup":  "OG-T-I-2"
+    },
+    {
+        "Department":  "T I 3",
+        "OGGroup":  "OG-T-I-3"
+    },
+    {
+        "Department":  "T I 4",
+        "OGGroup":  "OG-T-I-4"
+    },
+    {
+        "Department":  "T I 5",
+        "OGGroup":  "OG-T-I-5"
+    },
+    {
+        "Department":  "T II",
+        "OGGroup":  "OG-T-II"
+    },
+    {
+        "Department":  "T II 1",
+        "OGGroup":  "OG-T-II-1"
+    },
+    {
+        "Department":  "T II 2",
+        "OGGroup":  "OG-T-II-2"
+    },
+    {
+        "Department":  "T II 3",
+        "OGGroup":  "OG-T-II-3"
+    },
+    {
+        "Department":  "T II 4",
+        "OGGroup":  "OG-T-II-4"
+    },
+    {
+        "Department":  "T II 5",
+        "OGGroup":  "OG-T-II-5"
+    },
+    {
+        "Department":  "T III",
+        "OGGroup":  "OG-T-III"
+    },
+    {
+        "Department":  "T III 1",
+        "OGGroup":  "OG-T-III-1"
+    },
+    {
+        "Department":  "T III 2",
+        "OGGroup":  "OG-T-III-2"
+    },
+    {
+        "Department":  "T III 3",
+        "OGGroup":  "OG-T-III-3"
+    },
+    {
+        "Department":  "T III 4",
+        "OGGroup":  "OG-T-III-4"
+    },
+    {
+        "Department":  "Task Force KI",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "V / V I",
+        "OGGroup":  "OG-V; OG-V-I"
+    },
+    {
+        "Department":  "V I",
+        "OGGroup":  "OG-V-I"
+    },
+    {
+        "Department":  "V I 1",
+        "OGGroup":  "OG-V-I-1"
+    },
+    {
+        "Department":  "V I 2",
+        "OGGroup":  "OG-V-I-2"
+    },
+    {
+        "Department":  "V I 3",
+        "OGGroup":  "OG-V-I-3"
+    },
+    {
+        "Department":  "V I 3 / V II 1",
+        "OGGroup":  "OG-V-I-3; OG-V-II-1"
+    },
+    {
+        "Department":  "V I 4",
+        "OGGroup":  "OG-V-I-4"
+    },
+    {
+        "Department":  "V I 5",
+        "OGGroup":  "OG-V-I-5"
+    },
+    {
+        "Department":  "V I 5 / V II 2",
+        "OGGroup":  "OG-V-I-5; OG-V-II-2"
+    },
+    {
+        "Department":  "V II",
+        "OGGroup":  "OG-V-II"
+    },
+    {
+        "Department":  "V II 1",
+        "OGGroup":  "OG-V-II-1"
+    },
+    {
+        "Department":  "V II 2",
+        "OGGroup":  "OG-V-II-2"
+    },
+    {
+        "Department":  "V II 3",
+        "OGGroup":  "OG-V-II-3"
+    },
+    {
+        "Department":  "V II 4",
+        "OGGroup":  "OG-V-II-4"
+    },
+    {
+        "Department":  "V II 4 / V II 5",
+        "OGGroup":  "OG-V-II-4; OG-V-II-5"
+    },
+    {
+        "Department":  "V II 5",
+        "OGGroup":  "OG-V-II-5"
+    },
+    {
+        "Department":  "V II 6",
+        "OGGroup":  "OG-V-II-6"
+    },
+    {
+        "Department":  "W",
+        "OGGroup":  "OG-W"
+    },
+    {
+        "Department":  "W I",
+        "OGGroup":  "OG-W-I"
+    },
+    {
+        "Department":  "W I 1",
+        "OGGroup":  "OG-W-I-1"
+    },
+    {
+        "Department":  "W I 2",
+        "OGGroup":  "OG-W-I-2"
+    },
+    {
+        "Department":  "W I 2 / W I 3",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "W I 3",
+        "OGGroup":  "OG-W-I-3"
+    },
+    {
+        "Department":  "W I 4",
+        "OGGroup":  "OG-W-I-4"
+    },
+    {
+        "Department":  "W I 5",
+        "OGGroup":  "OG-W-I-5"
+    },
+    {
+        "Department":  "W I 6",
+        "OGGroup":  "OG-W-I-6"
+    },
+    {
+        "Department":  "W II",
+        "OGGroup":  "OG-W-II"
+    },
+    {
+        "Department":  "W II 1",
+        "OGGroup":  "OG-W-II-1"
+    },
+    {
+        "Department":  "W II 1 / W II 4",
+        "OGGroup":  "OG-W-II-1; OG-W-II-4"
+    },
+    {
+        "Department":  "W II 2",
+        "OGGroup":  "OG-W-II-2"
+    },
+    {
+        "Department":  "W II 3",
+        "OGGroup":  "OG-W-II-3"
+    },
+    {
+        "Department":  "W II 4",
+        "OGGroup":  "OG-W-II-4"
+    },
+    {
+        "Department":  "Z",
+        "OGGroup":  "OG-Z"
+    },
+    {
+        "Department":  "Z DigS",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z I",
+        "OGGroup":  "OG-Z-I"
+    },
+    {
+        "Department":  "Z I 1",
+        "OGGroup":  "OG-Z-I-1"
+    },
+    {
+        "Department":  "Z I 2",
+        "OGGroup":  "OG-Z-I-2"
+    },
+    {
+        "Department":  "Z I 2 Reisestelle",
+        "OGGroup":  "OG-Z-I-2-Reisestelle"
+    },
+    {
+        "Department":  "Z I 3",
+        "OGGroup":  "OG-Z-I-3"
+    },
+    {
+        "Department":  "Z I 3 Vergabestelle",
+        "OGGroup":  "OG-Z-I-3-Vergabestelle"
+    },
+    {
+        "Department":  "Z I 4",
+        "OGGroup":  "OG-Z-I-4"
+    },
+    {
+        "Department":  "Z I 4 extern",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z I 4 SG1",
+        "OGGroup":  "OG-Z-I-4-SG1"
+    },
+    {
+        "Department":  "Z I 4 SG2",
+        "OGGroup":  "OG-Z-I-4-SG2"
+    },
+    {
+        "Department":  "Z I 4 SG3",
+        "OGGroup":  "OG-Z-I-4-SG3"
+    },
+    {
+        "Department":  "Z I 4 SG4",
+        "OGGroup":  "OG-Z-I-4-SG4"
+    },
+    {
+        "Department":  "Z I 4 SG5",
+        "OGGroup":  "OG-Z-I-4-SG5"
+    },
+    {
+        "Department":  "Z I 4 SG6",
+        "OGGroup":  "OG-Z-I-4-SG6"
+    },
+    {
+        "Department":  "Z I 4 SG7",
+        "OGGroup":  "OG-Z-I-4-SG7"
+    },
+    {
+        "Department":  "Z I 4 TGM",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z I 5",
+        "OGGroup":  "OG-Z-I-5"
+    },
+    {
+        "Department":  "Z I 6",
+        "OGGroup":  "OG-Z-I-6"
+    },
+    {
+        "Department":  "Z II",
+        "OGGroup":  "OG-Z-II"
+    },
+    {
+        "Department":  "Z II 1",
+        "OGGroup":  "OG-Z-II-1"
+    },
+    {
+        "Department":  "Z II 1 extern",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z II 2",
+        "OGGroup":  "OG-Z-II-2"
+    },
+    {
+        "Department":  "Z II 3",
+        "OGGroup":  "OG-Z-II-3"
+    },
+    {
+        "Department":  "Z II 4",
+        "OGGroup":  "OG-Z-II-4"
+    },
+    {
+        "Department":  "Z II 4 MIZ",
+        "OGGroup":  "OG-Z-II-4-MIZ"
+    },
+    {
+        "Department":  "Z II 5",
+        "OGGroup":  "OG-Z-II-5"
+    },
+    {
+        "Department":  "Z II 5 Extern",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z II 5 SG1",
+        "OGGroup":  "OG-Z-II-5-SG1"
+    },
+    {
+        "Department":  "Z II 5 SG2",
+        "OGGroup":  "OG-Z-II-5-SG2"
+    },
+    {
+        "Department":  "Z II 5 SG3",
+        "OGGroup":  "OG-Z-II-5-SG3"
+    },
+    {
+        "Department":  "Z II 5 SG4",
+        "OGGroup":  "OG-Z-II-5-SG4"
+    },
+    {
+        "Department":  "Z II 6",
+        "OGGroup":  "OG-Z-II-6"
+    },
+    {
+        "Department":  "_S III 2",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Ausbildung Bonn",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Betriebssportgemeinschaft",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "BM, MinBüro",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "E II 7",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Gleichstellungsbeauftragte",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "HL KS B",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "IG II 7",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "KI I 1",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "KI II 6",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "N I 5-IKI",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "N II 4 R",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "N II/N II 4",
+        "OGGroup":  "OG-N-II; OG-N-II-4"
+    },
+    {
+        "Department":  "N III 3-IKI",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "N III 3-WKF",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "nuclear-security",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "P",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "P II 2",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "P II 3",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Pforte",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "PR",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Presse",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Reisekostenstelle",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "RS I 1",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "RS II 1, AG",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "RS II 3",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "RS II 5",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "RS III 5",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "RS Stabsorganisation",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "T I 2 KI",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "T I 2 UI",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "TGM",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "V",
+        "OGGroup":  "OG-V"
+    },
+    {
+        "Department":  "VdsM",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "VertP schwerbeh. Menschen im BMUV",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "WA I 5",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "WA I 6",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "WA II 1",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z I 5 (IT-Schulung)",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z I 5 Extern",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z I 8",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z III 1",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z III 2",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z III 2 Extern",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "Z III 5",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "ZG I 4",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "ZG I 4, TK",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "ZG I Ausbildung",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "ZG II 3",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "ZG IV 1",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "zzKI I 1_alt",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "zzKI I 5_alt",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "zzKI I 6, AG_alt",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "zzKI II 4_alt",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "zzKI II 7_alt",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "zzKI III 3_alt",
+        "OGGroup":  null
+    },
+    {
+        "Department":  "zzKI_alt",
+        "OGGroup":  null
+    }
+]

@@ -1,0 +1,17 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Massen-Erstellung Vorschau" Height="450" Width="600" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0">
+            <StackPanel x:Name="massPreviewPanel" Margin="5"/>
+        </ScrollViewer>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+            <Button x:Name="btnMassOK" Content="Bestätigen" Width="75" Margin="0,0,10,0"/>
+            <Button x:Name="btnMassCancel" Content="Abbrechen" Width="75"/>
+        </StackPanel>
+    </Grid>
+</Window>
