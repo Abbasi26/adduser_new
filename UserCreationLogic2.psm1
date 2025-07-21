@@ -1,19 +1,5 @@
 ﻿
 
-#OG Gruppen Funktion
-function ConvertToOGGroupName {
-    param(
-        [Parameter(Mandatory=$true)]
-        [string]$Department
-    )
-    # Trimmt Leerzeichen am Anfang/Ende
-    # Ersetzt alle (ggf. mehrfachen) Leerzeichen durch '-'
-    # Präfixt das Ergebnis mit "OG-"
-    $normalized = $Department.Trim() -replace '\s+', '-'
-    return "OG-$normalized"
-}
-
-
 # ------------------------------------------------
 # Funktion: Convert-DepartmentShort
 # ------------------------------------------------
@@ -449,39 +435,31 @@ function ProcessUserCreation {
     if ($ProgressCallback) { & $ProgressCallback 65 }
 
     # ------------------------------------------------
-    # Schritt 9: OG-Gruppenzuweisung (falls kein Abgeordneter und keine Sonderrolle)
+    # Schritt 9: OG-Gruppenzuweisung (statisches Mapping)
     # ------------------------------------------------
-    # Prüfen, ob wir eine OG-Gruppe brauchen
-    if ($Department -and -not $isAbgeordnet -and ($roleSelection -eq "")) {
-        # Säubere den Department-String: Trim und Ersetzung von Leerzeichen durch Bindestriche
-        $deptClean = $Department.Trim().Replace(" ", "-")
-        # Erstelle das erwartete Präfix, z. B. "OG-Z-II-5" für "Z II 5"
-        $expectedPrefix = "OG-$deptClean"
-        WriteJobLog "Erwarte OG-Gruppe mit Präfix '$expectedPrefix'. Starte Suche mit Filter..."
-    
-        # Verwende einen LDAP-Filter, der alle Gruppen erfasst, die mit dem erwarteten Präfix beginnen
-        $ldapFilter = "Name -like '$expectedPrefix*'"
-        try {
-            $ogGroups = Get-ADGroup -Filter $ldapFilter -ErrorAction Stop
-            if ($ogGroups.Count -gt 0) {
-                $firstGroup = $ogGroups | Select-Object -First 1
-                try {
-                    Add-ADGroupMember -Identity $firstGroup.Name -Members $UserID -ErrorAction Stop
-                    WriteJobLog "$UserID -> OG-Gruppe '$($firstGroup.Name)' (erste Gruppe hinzugefügt)"
-                }
-                catch {
-                    WriteJobLog "Fehler beim Hinzufügen zu OG-Gruppe '$($firstGroup.Name)': $($_.Exception.Message)" "WARN"
-                }
-            }
-            else {
-                WriteJobLog "Keine OG-Gruppe gefunden für Filter '$ldapFilter'." "WARN"
-            }
+    if ($Department -and $isAbgeordnet -ne 'j' -and ($roleSelection -eq '')) {
+
+        $ogName = $null
+        if ($departmentOGMapping.ContainsKey($Department)) {
+            $ogName = $departmentOGMapping[$Department]
+            WriteJobLog "Mapping-Treffer: '$Department' → OG-Gruppe '$ogName'"
         }
-        catch {
-            WriteJobLog "Fehler bei der OG-Gruppenzuweisung für Department '$Department' mit Filter '$ldapFilter': $($_.Exception.Message)" "WARN"
+        else {
+            WriteJobLog "Kein Mapping für Department '$Department' gefunden – überspringe OG-Gruppe" "WARN"
+        }
+
+        if ($ogName) {
+            try {
+                Add-ADGroupMember -Identity $ogName -Members $UserID -ErrorAction Stop
+                WriteJobLog "$UserID -> OG-Gruppe '$ogName'" "SUCCESS"
+            }
+            catch {
+                WriteJobLog "Fehler beim Hinzufügen zu '$ogName': $($_.Exception.Message)" "WARN"
+            }
         }
     }
-    if ($ProgressCallback) { & $ProgressCallback 70 }
+    if ($ProgressCallback) { & $ProgressCallback 75 }
+    # ------------------------------------------------------------------------
 
     # ------------------------------------------------
     # Schritt 10: Referats-Verteiler
