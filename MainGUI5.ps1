@@ -656,6 +656,7 @@ $btnStart.Add_Click({
         isExtern = $chkExtern.IsChecked
         isVerstecken = $chkVerstecken.IsChecked
         isResMailbox = if ($chkResMailbox.IsChecked) { "j" } else { "n" }
+        departmentOGMapping = $global:departmentOGMapping
         AdditionalGroups = ($lstGroups.Items | Where-Object { $_.IsChecked } | ForEach-Object { $_.Name })
         LogTextbox = $txtLog
         ProgressCallback = { param($p) Update-UI { Update-ProgressControls -percent $p } }
