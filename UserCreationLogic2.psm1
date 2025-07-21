@@ -19,7 +19,73 @@ function Convert-DepartmentShort {
     $converted = $converted -replace 'I','1'
     $converted = $converted -replace 'V','5'
 
-    return $converted
+return $converted
+}
+
+# ------------------------------------------------
+# Funktion: Move-UserToTargetOU
+# ------------------------------------------------
+function Move-UserToTargetOU {
+    <#
+        .SYNOPSIS
+            Verschiebt einen Benutzer in die korrekte Ziel-OU
+            anhand Conet-Flag, Gender, Extern-Status und Rolle.
+
+        .PARAMETER UserID
+            SamAccountName des Benutzers.
+
+        .PARAMETER Gender
+            'Mann'  | 'Frau' | 'Divers' | 'Nicht natürliche Person (NNP)'
+
+        .PARAMETER Role
+            '', 'Azubi', 'Praktikant', 'Hospitant', 'Referendar'
+
+        .PARAMETER IsConet
+            'j' / 'n'
+
+        .PARAMETER IsExtern
+            [bool]  Extern-Checkbox aus GUI
+
+        .PARAMETER DryRun
+            Nur logging, kein echtes Move-ADObject.
+    #>
+    param(
+        [string]$UserID,
+        [string]$Gender,
+        [string]$Role,
+        [string]$IsConet,
+        [bool]  $IsExtern,
+        [switch]$DryRun
+    )
+
+    $rootOU = "OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"
+    switch ($true) {
+        { $IsConet -eq 'j' }                                                   { $child = 'GU-IT' }
+        { $Gender  -eq 'Nicht natürliche Person (NNP)' }                       { $child = 'Funktionsaccounts' }
+        { $IsExtern }                                                          { $child = 'Extern' }
+        { $Role -in @('Azubi','Praktikant','Hospitant','Referendar') }         { $child = 'Referendare-Praktikanten-Hospitanten' }
+        default                                                                { $child = '' }  # Standard
+    }
+
+    $targetOU = ($child ? "OU=$child,$rootOU" : $rootOU)
+
+    try {
+        $u = Get-ADUser -Identity $UserID -ErrorAction Stop
+        $currentOU = ($u.DistinguishedName -split ',OU=',2)[1]
+
+        if ($currentOU -ieq $targetOU) {
+            Write-Verbose "[$UserID] bleibt in OU '$currentOU'"
+            return
+        }
+
+        Write-Verbose "[$UserID] Move:  $currentOU  →  $targetOU"
+        if (-not $DryRun) {
+            Move-ADObject -Identity $u.DistinguishedName -TargetPath $targetOU -ErrorAction Stop
+        }
+    }
+    catch {
+        throw "Move-UserToTargetOU  –  $($_.Exception.Message)"
+    }
 }
 
 # ------------------------------------------------
@@ -611,27 +677,16 @@ function ProcessUserCreation {
     # Schritt 17: AD-Objekt in die richtige OU verschieben
     WriteJobLog "Prüfe OU-Verschiebung für $UserID"
     try {
-        $targetOU = "OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"  # Standard-OU
-        if ($isConet -eq "j") {
-            $targetOU = "OU=GU-IT,OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"
-        } elseif ($gender -eq "Nicht natürliche Person (NNP)") {
-            $targetOU = "OU=Funktionsaccounts,OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"
-        } elseif ($isExtern) {
-            $targetOU = "OU=Extern,OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"
-        } elseif ($roleSelection -in @("Azubi", "Praktikant", "Referendar", "Hospitant")) {
-            $targetOU = "OU=Referendare/Praktikanten/Hospitanten,OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"
-        }
-
-        $currentUser = Get-ADUser -Identity $UserID -ErrorAction Stop
-        $currentOU = ($currentUser.DistinguishedName -split ",OU=")[1..999] -join ",OU="
-        if ($currentOU -ne $targetOU) {
-            Move-ADObject -Identity $currentUser.DistinguishedName -TargetPath $targetOU -ErrorAction Stop
-            WriteJobLog "Benutzer $UserID in OU '$targetOU' verschoben." "INFO"
-        } else {
-            WriteJobLog "Benutzer $UserID bleibt in aktueller OU '$currentOU'." "INFO"
-        }
-    } catch {
-        WriteJobLog "Fehler beim Verschieben des Benutzers in die OU: $($_.Exception.Message)" "ERROR"
+        Move-UserToTargetOU `
+            -UserID   $UserID `
+            -Gender   $gender `
+            -Role     $roleSelection `
+            -IsConet  $isConet `
+            -IsExtern $isExtern
+        WriteJobLog "OU-Verschiebung geprüft/ausgeführt." "INFO"
+    }
+    catch {
+        WriteJobLog $_ "ERROR"
         throw
     }
 
@@ -672,4 +727,4 @@ function ProcessUserCreation {
 # ------------------------------------------------
 # Modul-Export
 # ------------------------------------------------
-Export-ModuleMember -Function ProcessUserCreation, Convert-DepartmentShort
+Export-ModuleMember -Function ProcessUserCreation, Convert-DepartmentShort, Move-UserToTargetOU
