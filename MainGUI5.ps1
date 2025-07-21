@@ -32,6 +32,7 @@ if (-not [System.Windows.Application]::Current) {
 $global:AppConfig = Get-Content "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\config.json" -Raw -Encoding UTF8 | ConvertFrom-Json
 $global:StdProfiles = Get-Content "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\stdprofiles.json" -Raw -Encoding UTF8 | ConvertFrom-Json
 Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\MailboxModule.psm1"
+Import-Module .\ProfileModule.psm1 -Force
 
 # Standard-Suchattribute für Gruppensuche
 $global:SearchAttributes = @("cn")
@@ -205,7 +206,7 @@ $chkPhonebook     = $window.FindName("chkPhonebook")
 $chkVIP           = $window.FindName("chkVIP")
 $chkIsFemale      = $window.FindName("chkIsFemale")
 $chkAbgeordnet    = $window.FindName("chkAbgeordnet")
-#$chkNatPerson     = $window.FindName("chkNatPerson")
+$chkNatPerson     = $window.FindName("chkNatPerson")
 $chkConet         = $window.FindName("chkConet")
 $chkExternAccount = $window.FindName("chkExternAccount")
 $chkMailbox       = $window.FindName("chkMailbox")
@@ -235,6 +236,43 @@ $lstGroups = $window.FindName("lstGroups")
 $comboDept = $window.FindName("comboDept")
 $txtLog = $window.FindName("txtLog")
 $comboGender = $window.FindName("comboGender")
+
+# Steuerelement-Map fuer Profilfunktionen
+$global:UI = @{
+    txtUser        = $txtUser
+    txtGivenName   = $txtGivenName
+    txtLastName    = $txtLastName
+    txtBuro        = $txtBuro
+    comboSite      = $comboSite
+    comboDept      = $comboDept
+    txtRufnummer   = $txtRufnummer
+    txtHandynummer = $txtHandynummer
+    txtTitle       = $txtTitle
+    comboAmts      = $comboAmts
+    comboLauf      = $comboLauf
+    txtExp         = $txtExp
+    txtAktiv       = $txtAktiv
+    txtTicket      = $txtTicket
+    comboRolle     = $comboRolle
+    comboFunktion  = $comboFunktion
+    comboSonder    = $comboSonder
+    txtDesc        = $txtDesc
+    txtRefUser     = $txtRefUser
+    lstGroups      = $lstGroups
+    comboGender    = $comboGender
+    chkNatPerson   = $chkNatPerson
+    chkIVBB        = $chkIVBB
+    chkGVPL        = $chkGVPL
+    chkVIP         = $chkVIP
+    chkExtern      = $chkExtern
+    chkVerstecken  = $chkVerstecken
+    chkPhonebook   = $chkPhonebook
+    chkAbgeordnet  = $chkAbgeordnet
+    chkConet       = $chkConet
+    chkExternAccount = $chkExternAccount
+    chkResMailbox  = $chkResMailbox
+    chkMailbox     = $chkMailbox
+}
 
 # ToolTips setzen
 $txtUser.ToolTip        = "Geben Sie die UserID ein (z. B. AbbasiW)"
@@ -1063,148 +1101,14 @@ function Show-MassCreationDone {
 
 # Funktion zum Speichern eines Profils
 $btnSaveProfile.Add_Click({
-    $usernameForPath = $env:USERNAME
-    if ($usernameForPath -match '^[01]') {
-        $usernameForPath = $usernameForPath.Substring(1)
-    }
-    $defaultProfilePath = "\\office.dir\files\Benutzer\$usernameForPath\UserData"
-
-    $fixedGroups = @()
-    if ($txtUser.Text.Trim()) {
-        try {
-            $adUser = Get-ADUser -Identity $txtUser.Text.Trim() -Properties MemberOf -ErrorAction Stop
-            if ($adUser.MemberOf) {
-                $fixedGroups = foreach ($dn in $adUser.MemberOf) {
-                    if ($dn -match "^CN=([^,]+)") { $matches[1] } else { $dn }
-                }
-            }
-        } catch {
-            $fixedGroups = @()
-        }
-    }
-
-    $profileData = @{
-        UserID         = $txtUser.Text.Trim()
-        Gender         = if ($comboGender.SelectedItem) { $comboGender.SelectedItem.Content } else { "Mann" }
-        GivenName      = $txtGivenName.Text.Trim()
-        LastName       = $txtLastName.Text.Trim()
-        Buro           = $txtBuro.Text.Trim()
-        Site           = if ($comboSite.SelectedItem) { $comboSite.SelectedItem.Content } else { "" }
-        Department     = $comboDept.Text.Trim()
-        Rufnummer      = $txtRufnummer.Text.Trim()
-        Handynummer    = $txtHandynummer.Text.Trim()
-        Title          = $txtTitle.Text.Trim()
-        Amtsbez        = $comboAmts.Text.Trim()
-        Laufgruppe     = $comboLauf.Text.Trim()
-        ExpDate        = $txtExp.Text.Trim()
-        EntryDate      = $txtAktiv.Text.Trim()
-        TicketNr       = $txtTicket.Text.Trim()
-        Rolle          = if ($comboRolle.SelectedItem) { $comboRolle.SelectedItem.Content } else { "" }
-        Sonderkenn     = $comboSonder.Text.Trim()
-        Funktion       = $comboFunktion.Text.Trim()
-        Description    = $txtDesc.Text.Trim()
-        RefUser        = $txtRefUser.Text.Trim()
-        AdditionalGroups     = @($lstGroups.Items | Where-Object { $_.IsChecked } | ForEach-Object { $_.Name })
-        FixedAdditionalGroups= $fixedGroups
-        IVBB           = if ($chkIVBB.IsChecked)       { "j" } else { "n" }
-        GVPL           = if ($chkGVPL.IsChecked)       { "j" } else { "n" }
-        VIP            = if ($chkVIP.IsChecked)        { "j" } else { "n" }
-        #IsFemale       = if ($gender -eq "Frau") { "j" } else { "n" }
-        Extern         = $chkExtern.IsChecked
-        Verstecken     = $chkVerstecken.IsChecked
-        Phonebook      = $chkPhonebook.IsChecked
-        #NatPerson      = if ($chkNatPerson.IsChecked)  { "j" } else { "n" }
-        Abgeordnet     = if ($chkAbgeordnet.IsChecked) { "j" } else { "n" }
-        Conet          = if ($chkConet.IsChecked)      { "j" } else { "n" }
-        ExternAccount  = if ($chkExternAccount.IsChecked) { "j" } else { "n" }
-        ResMailbox     = if ($chkResMailbox.IsChecked) { "j" } else { "n" }
-        Mailbox        = if ($chkMailbox.IsChecked)    { "j" } else { "n" }
-    }
-
-    $json = $profileData | ConvertTo-Json -Depth 5
-    $defaultFileName = "$($txtUser.Text.Trim())_$($txtTicket.Text.Trim()).json"
-    $defaultFullPath = Join-Path $defaultProfilePath $defaultFileName
-
-    $saveDialog = New-Object System.Windows.Forms.SaveFileDialog
-    $saveDialog.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*"
-    $saveDialog.Title  = "Profil speichern"
-    $saveDialog.InitialDirectory = $defaultProfilePath
-    $saveDialog.FileName = $defaultFileName
-
-    if ($saveDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-        $json | Out-File -FilePath $saveDialog.FileName -Encoding UTF8
-        [System.Windows.MessageBox]::Show("Profil gespeichert unter: $($saveDialog.FileName)")
-    }
+    $base = "\\office.dir\files\Benutzer\$($env:USERNAME.TrimStart('0','1'))\UserData"
+    Save-UserProfile -UI $global:UI -BasePath $base
 })
 
 # Funktion zum Laden eines Profils
 $btnLoadProfile.Add_Click({
-    $usernameForPath = $env:USERNAME
-    if ($usernameForPath -match '^[01]') {
-        $usernameForPath = $usernameForPath.Substring(1)
-    }
-    $defaultProfilePath = "\\office.dir\files\Benutzer\$usernameForPath\UserData"
-
-    $openDialog = New-Object System.Windows.Forms.OpenFileDialog
-    $openDialog.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*"
-    $openDialog.Title  = "Profil laden"
-    $openDialog.InitialDirectory = $defaultProfilePath
-
-    if ($openDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-        $json = Get-Content $openDialog.FileName -Raw -Encoding UTF8 | ConvertFrom-Json
-        $result = Show-ProfilePreview -ProfileData $json
-
-        if ($result) {
-            Update-UI {
-                $txtUser.Text       = $json.UserID
-                $comboGender.SelectedItem = $comboGender.Items | Where-Object { $_.Content -eq $json.Gender }
-                $txtGivenName.Text  = $json.GivenName
-                $txtLastName.Text   = $json.LastName
-                $txtBuro.Text       = $json.Buro
-                $comboSite.SelectedItem = $comboSite.Items | Where-Object { $_.Content -eq $json.Site }
-                $comboDept.Text     = $json.Department
-                $txtRufnummer.Text  = $json.Rufnummer
-                $txtHandynummer.Text= $json.Handynummer
-                $txtTitle.Text      = $json.Title
-                $comboAmts.Text     = $json.Amtsbez
-                $comboLauf.Text     = $json.Laufgruppe
-                $txtExp.Text        = $json.ExpDate
-                $txtAktiv.Text      = $json.EntryDate
-                $txtTicket.Text     = $json.TicketNr
-                $comboRolle.SelectedItem = $comboRolle.Items | Where-Object { $_.Content -eq $json.Rolle }
-                $comboSonder.Text   = $json.Sonderkenn
-                $comboFunktion.Text = $json.Funktion
-                $txtDesc.Text       = $json.Description
-                $txtRefUser.Text    = $json.RefUser
-
-                $lstGroups.Items.Clear()
-                if ($json.FixedAdditionalGroups -or $json.AdditionalGroups) {
-                    $allGroups = @($json.FixedAdditionalGroups) + @($json.AdditionalGroups) | Sort-Object -Unique
-                    foreach ($grp in $allGroups) {
-                        $groupItem = New-Object GroupItem
-                        $groupItem.Name = $grp -replace '^\[AD\]\s*', ''
-                        $groupItem.IsChecked = ($json.AdditionalGroups -contains $grp)
-                        $lstGroups.Items.Add($groupItem)
-                    }
-                }
-
-                $chkIVBB.IsChecked       = ($json.IVBB -eq "j")
-                $chkGVPL.IsChecked       = ($json.GVPL -eq "j")
-                $chkVIP.IsChecked        = ($json.VIP -eq "j")
-                #$chkIsFemale.IsChecked   = ($json.IsFemale -eq "j")
-                $chkExtern.IsChecked     = $json.Extern
-                $chkVerstecken.IsChecked = $json.Verstecken
-                $chkPhonebook.IsChecked  = $json.Phonebook
-                #$chkNatPerson.IsChecked  = ($json.NatPerson -eq "j")
-                $chkAbgeordnet.IsChecked = ($json.Abgeordnet -eq "j")
-                $chkConet.IsChecked      = ($json.Conet -eq "j")
-                $chkExternAccount.IsChecked = ($json.ExternAccount -eq "j")
-                $chkResMailbox.IsChecked = ($json.ResMailbox -eq "j")
-                $chkMailbox.IsChecked    = ($json.Mailbox -eq "j")
-            }
-            [System.Windows.MessageBox]::Show("Profil erfolgreich übernommen!")
-        }
-    }
+    $base = "\\office.dir\files\Benutzer\$($env:USERNAME.TrimStart('0','1'))\UserData"
+    Load-UserProfile -UI $global:UI -BasePath $base
 })
 
 # Funktion zur Anzeige der Profil-Vorschau
