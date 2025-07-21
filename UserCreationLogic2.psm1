@@ -19,7 +19,7 @@ function Convert-DepartmentShort {
     $converted = $converted -replace 'I','1'
     $converted = $converted -replace 'V','5'
 
-    return $converted
+return $converted
 }
 
 # ------------------------------------------------
@@ -611,27 +611,16 @@ function ProcessUserCreation {
     # Schritt 17: AD-Objekt in die richtige OU verschieben
     WriteJobLog "Prüfe OU-Verschiebung für $UserID"
     try {
-        $targetOU = "OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"  # Standard-OU
-        if ($isConet -eq "j") {
-            $targetOU = "OU=GU-IT,OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"
-        } elseif ($gender -eq "Nicht natürliche Person (NNP)") {
-            $targetOU = "OU=Funktionsaccounts,OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"
-        } elseif ($isExtern) {
-            $targetOU = "OU=Extern,OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"
-        } elseif ($roleSelection -in @("Azubi", "Praktikant", "Referendar", "Hospitant")) {
-            $targetOU = "OU=Referendare/Praktikanten/Hospitanten,OU=Benutzer,OU=AnwenderRes,DC=office,DC=dir"
-        }
-
-        $currentUser = Get-ADUser -Identity $UserID -ErrorAction Stop
-        $currentOU = ($currentUser.DistinguishedName -split ",OU=")[1..999] -join ",OU="
-        if ($currentOU -ne $targetOU) {
-            Move-ADObject -Identity $currentUser.DistinguishedName -TargetPath $targetOU -ErrorAction Stop
-            WriteJobLog "Benutzer $UserID in OU '$targetOU' verschoben." "INFO"
-        } else {
-            WriteJobLog "Benutzer $UserID bleibt in aktueller OU '$currentOU'." "INFO"
-        }
-    } catch {
-        WriteJobLog "Fehler beim Verschieben des Benutzers in die OU: $($_.Exception.Message)" "ERROR"
+        Move-UserToTargetOU `
+            -UserID   $UserID `
+            -Gender   $gender `
+            -Role     $roleSelection `
+            -IsConet  $isConet `
+            -IsExtern $isExtern
+        WriteJobLog "OU-Verschiebung geprüft/ausgeführt." "INFO"
+    }
+    catch {
+        WriteJobLog $_ "ERROR"
         throw
     }
 
