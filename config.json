@@ -21,6 +21,7 @@
         "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\AttributeModule.psm1",
         "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\MailboxModule.psm1",
         "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\FolderStructureModule.psm1",
+        "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\OUHelperModule.psm1",
         "\\office.dir\\files\\ORG\\OrgDATA\\IT-BMU\\03_Tools\\AddUser-GUI\\AddUser_v22\\UserCreationLogic2.psm1"
     ],
     "MaxGroupsToLoad": 100
