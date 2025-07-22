@@ -32,14 +32,14 @@ if (-not [System.Windows.Application]::Current) {
 $global:AppConfig = Get-Content "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\config.json" -Raw -Encoding UTF8 | ConvertFrom-Json
 $global:StdProfiles = Get-Content "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\stdprofiles.json" -Raw -Encoding UTF8 | ConvertFrom-Json
 Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\MailboxModule.psm1"
-Import-Module .\ProfileModule.psm1 -Force
+Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\ProfileModule.psm1"
 
 # Standard-Suchattribute für Gruppensuche
 $global:SearchAttributes = @("cn")
 
 # Importiere erforderliche Module
 foreach ($module in $global:AppConfig.Modules) {
-    $modulePath = "\$module"
+    $modulePath = $module
     if (Test-Path $modulePath) {
         Import-Module $modulePath -Force
     } else {
@@ -546,13 +546,13 @@ function Start-UserCreationRunspace {
     $scriptBlock = {
         param($params)
         $modules = @(
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v20\ADUserCreationModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v20\UserCreationLogic.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v20\AttributeModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v20\LogModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v20\DatabaseModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v20\FolderStructureModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v20\MailboxModule.psm1"
+            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\ADUserCreationModule.psm1",
+            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\UserCreationLogic2.psm1",
+            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\AttributeModule.psm1",
+            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\LogModule.psm1",
+            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\DatabaseModule.psm1",
+            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\FolderStructureModule.psm1",
+            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\MailboxModule.psm1"
         )
         foreach ($module in $modules) {
             Import-Module $module -Force -ErrorAction SilentlyContinue
