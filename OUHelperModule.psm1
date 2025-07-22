@@ -44,7 +44,11 @@ function Move-UserToTargetOU {
         default                                                                { $child = '' }  # Standard
     }
 
-    $targetOU = ($child ? "OU=$child,$rootOU" : $rootOU)
+    if ($child) {
+        $targetOU = "OU=$child,$rootOU"
+    } else {
+        $targetOU = $rootOU
+    }
 
     try {
         $u = Get-ADUser -Identity $UserID -ErrorAction Stop
@@ -61,7 +65,7 @@ function Move-UserToTargetOU {
         }
     }
     catch {
-        throw "Move-UserToTargetOU  –  $($_.Exception.Message)"
+        throw "Move-UserToTargetOU - $($_.Exception.Message)"
     }
 }
 
