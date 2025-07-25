@@ -88,15 +88,16 @@ function Set-ExtensionAttributes {
 
     if ($ext.Count) {
         Set-ADUser -Identity $UserID -Replace $ext -ErrorAction Stop
-        WriteJobLog "ExtensionAttributes gesetzt: $($ext.Keys -join ', ')" "SUCCESS"
+        # Erfolgsmeldung konsistent über -msg und -Color ausgeben
+        WriteJobLog -msg "ExtensionAttributes gesetzt: $($ext.Keys -join ', ')" -Color Green
     }
 
     if ($isVIP -eq 'j') {
         try {
             Set-ADUser -Identity $UserID -Add @{ pager = 'VIP' } -ErrorAction Stop
-            WriteJobLog "VIP (Quota) gesetzt." "INFO"
+            WriteJobLog -msg "VIP (Quota) gesetzt." -Color Blue
         } catch {
-            WriteJobLog "Fehler VIP: $($_.Exception.Message)" "WARN"
+            WriteJobLog -msg "Fehler VIP: $($_.Exception.Message)" -Color Orange
         }
     }
 }

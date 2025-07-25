@@ -31,9 +31,11 @@ Import-Module "$Script:ToolRoot\ConfigModule.psm1" -Force
     $global:CustomApplication = $app
 }
 
-# Lade Konfigurationsdateien
-$global:AppConfig = Get-Content "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\config.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+# Lade die Konfiguration einmal über das ConfigModule (cacht intern)
+$global:AppConfig = Get-AppConfig
+# StdProfiles werden weiter aus der separaten Datei geladen
 $global:StdProfiles = Get-Content "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\stdprofiles.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+# Importiere Mailbox und Profile Module separat (falls nicht über $global:AppConfig.Modules abgedeckt)
 Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\MailboxModule.psm1"
 Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\ProfileModule.psm1"
 
