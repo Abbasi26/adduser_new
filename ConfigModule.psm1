@@ -41,6 +41,9 @@ function Get-AppConfig {
     }
     try {
         $script:AppConfig = Get-Content -LiteralPath $resolved -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($env:ADDUSER_LOGPATH) {
+            $script:AppConfig.Paths.LogPath = $env:ADDUSER_LOGPATH
+        }
         Write-Log -Message "Config loaded & cached from '$resolved'." -Category DEBUG
         return $script:AppConfig
     } catch {

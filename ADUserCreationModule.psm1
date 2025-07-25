@@ -33,8 +33,20 @@ function new-ADAccountSettings {
         $newUserData.expirationDate = ([datetime](Get-Date ($expirationDate + " 00:00:00")).AddDays(1))
     } #>
 
-    if ($global:AppConfig.LogInLog) {
-        "$($newUserData.UserloginName) : $userLoginPassword" | Out-File -FilePath $global:AppConfig.LogInLog -Append
+    $loginLog = $null
+    if ($global:AppConfig -and $global:AppConfig.Paths -and $global:AppConfig.Paths.LogInLog) {
+        $loginLog = $global:AppConfig.Paths.LogInLog
+    }
+    if ($loginLog) {
+        $dir = [IO.Path]::GetDirectoryName($loginLog)
+        if (-not (Test-Path -LiteralPath $dir)) {
+            New-Item -ItemType Directory -Path $dir -Force | Out-Null
+        }
+        try {
+            "$($newUserData.UserloginName) : $userLoginPassword" | Out-File -FilePath $loginLog -Append
+        } catch {
+            Write-Warning "Konnte Log-Datei '$loginLog' nicht beschreiben: $($_.Exception.Message)"
+        }
     }
 
     Write-Log -Message "new-ADAccountSettings - Datenobjekt erstellt für $newUserID" -Color "green"
