@@ -38,10 +38,10 @@ function Send-TicketMail {
                          -BodyAsHtml `
                          -Encoding UTF8 -ErrorAction Stop
 
-        MyWrite-Log "Ticket-E-Mail mit Betreff '$subject' erfolgreich gesendet." -Color "green"
+        Write-Log -Message "Ticket-E-Mail mit Betreff '$subject' erfolgreich gesendet." -Color "green"
     }
     catch {
-        MyWrite-Log "Fehler beim Senden der Ticket-E-Mail: $($_.Exception.Message)" -Color "red"
+        Write-Log -Message "Fehler beim Senden der Ticket-E-Mail: $($_.Exception.Message)" -Color "red"
     }
 }
 

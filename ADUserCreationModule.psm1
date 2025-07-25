@@ -9,7 +9,7 @@ function new-ADAccountSettings {
         [Parameter(Mandatory=$false)][string]$userDescription = ""
     )
 
-    MyWrite-Log "new-ADAccountSettings für $newUserID" -Color "blue"
+    Write-Log -Message "new-ADAccountSettings fÃ¼r $newUserID" -Color "blue"
 
     $UserDisplayName   = if ($lastName -and $givenName) { "$lastName, $givenName" } else { $newUserID }
     $userLoginPassword = "BmuB_$(Get-Date -Format ddHHmm)"
@@ -37,7 +37,7 @@ function new-ADAccountSettings {
         "$($newUserData.UserloginName) : $userLoginPassword" | Out-File -FilePath $global:AppConfig.LogInLog -Append
     }
 
-    MyWrite-Log "new-ADAccountSettings - Datenobjekt erstellt für $newUserID" -Color "green"
+    Write-Log -Message "new-ADAccountSettings - Datenobjekt erstellt fÃ¼r $newUserID" -Color "green"
     return $newUserData
 }
 
@@ -59,7 +59,7 @@ function Set-NewADAccount {
             -Path                  $newUserData.OUPath `
             -ProfilePath           "\\office.dir\Files\Benutzer\$($newUserData.UserloginName)\Profiles\Profile"
 
-        MyWrite-Log "Benutzer $($newUserData.UserloginName) erfolgreich erstellt." -Color "green"
+        Write-Log -Message "Benutzer $($newUserData.UserloginName) erfolgreich erstellt." -Color "green"
         # OPTIONAL: returning a small customobject
         return [pscustomobject]@{
             Success = $true
@@ -68,7 +68,7 @@ function Set-NewADAccount {
         }
     }
     catch {
-        MyWrite-Log "Fehler Set-NewADAccount: $($_.Exception.Message)" -Color "red"
+        Write-Log -Message "Fehler Set-NewADAccount: $($_.Exception.Message)" -Color "red"
         return [pscustomobject]@{
             Success = $false
             Message = $_.Exception.Message
@@ -84,18 +84,18 @@ function Set-ConetDisplayName {
         if (-not $adUser.DisplayName.StartsWith("CONET ")) {
             $newDisp = "CONET " + $adUser.DisplayName
             Set-ADUser -Identity $UserID -DisplayName $newDisp -ErrorAction SilentlyContinue
-            MyWrite-Log "Anzeigename mit 'CONET ' erweitert: $newDisp" -Color "green"
+            Write-Log -Message "Anzeigename mit 'CONET ' erweitert: $newDisp" -Color "green"
             try {
                 Rename-ADObject -Identity $adUser.DistinguishedName -NewName $newDisp -ErrorAction Stop
-                MyWrite-Log "CN (Common Name) mit 'CONET ' erweitert: $newDisp" -Color "green"
+                Write-Log -Message "CN (Common Name) mit 'CONET ' erweitert: $newDisp" -Color "green"
             }
             catch {
-                MyWrite-Log "Fehler beim Ändern des CN: $_" -Color "red"
+                Write-Log -Message "Fehler beim Ã„ndern des CN: $_" -Color "red"
             }
         }
     }
     else {
-        MyWrite-Log "Benutzer $UserID wurde nicht gefunden." -Color "red"
+        Write-Log -Message "Benutzer $UserID wurde nicht gefunden." -Color "red"
     }
 }
 

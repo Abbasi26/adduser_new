@@ -63,11 +63,25 @@ function Stop-Logger {
 }
 
 function Write-Log {
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory)][string]$Message,
         [ValidateSet('INFO','WARN','ERROR','SUCCESS','DEBUG')]
-        [string]$Category = 'INFO'
+        [string]$Category = 'INFO',
+        [string]$Color
     )
+
+    # Optionales Farb→Level-Mapping, damit -Color überall konsistent funktioniert
+    if ($PSBoundParameters.ContainsKey('Color') -and -not [string]::IsNullOrWhiteSpace($Color)) {
+        switch ($Color.ToLower()) {
+            'blue'   { $Category = 'INFO' }
+            'green'  { $Category = 'SUCCESS' }
+            'red'    { $Category = 'ERROR' }
+            'orange' { $Category = 'WARN' }
+            'gray'   { $Category = 'DEBUG' }
+            default  { }
+        }
+    }
 
     $stamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     $line  = "[$stamp] [$Category] $Message"
@@ -104,7 +118,18 @@ function Write-Log {
 }
 Set-Alias MyWrite-Log Write-Log -Scope Global
 
-function WriteJobLog { param([string]$msg,[string]$Category='INFO') Write-Log $msg $Category }
+function WriteJobLog {
+    param(
+        [Parameter(Mandatory)][string]$msg,
+        [string]$Category = 'INFO',
+        [string]$Color
+    )
+    if ($PSBoundParameters.ContainsKey('Color') -and -not [string]::IsNullOrWhiteSpace($Color)) {
+        Write-Log -Message $msg -Color $Color
+    } else {
+        Write-Log -Message $msg -Category $Category
+    }
+}
 
 function Get-LogPath     { $script:CentralLogFile }
 function Get-TempLogPath { $script:TempLogFile   }

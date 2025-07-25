@@ -2,7 +2,7 @@
 
 function Std-Attributes {
     param([Parameter(Mandatory=$true)]$userAttributes)
-    MyWrite-Log "Std-Attributes für $($userAttributes.id)" -Color "blue"
+    Write-Log -Message "Std-Attributes für $($userAttributes.id)" -Color "blue"
     $stdparams = @{
         "ID"                   = $userAttributes.id
         "extensionAttribute13" = "x"
@@ -15,7 +15,7 @@ function Std-Attributes {
 function Set-ADExAttributes {
     param([Parameter(Mandatory=$true)]$userAttributes)
     try {
-        MyWrite-Log "Set-ADExAttributes: $($userAttributes.id)" -Color "blue"
+        Write-Log -Message "Set-ADExAttributes: $($userAttributes.id)" -Color "blue"
         Set-ADUser -Identity $userAttributes.id -Clear "extensionAttribute3","extensionAttribute13","extensionAttribute14"
         $params = @{}
         if ($userAttributes.extensionAttribute3)  { $params["extensionAttribute3"]  = "IVBB" }
@@ -23,12 +23,12 @@ function Set-ADExAttributes {
         if ($userAttributes.extensionAttribute14) { $params["extensionAttribute14"] = $userAttributes.extensionAttribute14 }
         if ($params.Count -gt 0) {
             Set-ADUser -Identity $userAttributes.id -Add $params
-            MyWrite-Log "Attribute gesetzt: $($params.Keys)" -Color "green"
+            Write-Log -Message "Attribute gesetzt: $($params.Keys)" -Color "green"
         }
         return $true
     }
     catch {
-        MyWrite-Log "Fehler Set-ADExAttributes: $($_.Exception.Message)" -Color "red"
+        Write-Log -Message "Fehler Set-ADExAttributes: $($_.Exception.Message)" -Color "red"
         return $false
     }
 }
@@ -43,7 +43,7 @@ function check-date {
             [datetime](Get-Date $date -Format "dd.MM.yyyy") | Out-Null
             return $true
         } catch {
-            MyWrite-Log "Ungültiges Datum: $date" -Color Red
+            Write-Log -Message "Ungültiges Datum: $date" -Color Red
             return $false
         }
     }
@@ -104,7 +104,7 @@ function Set-ExtensionAttributes {
 
 function set-attributes {
     param([Parameter(Mandatory=$true)][string]$attribute)
-    MyWrite-Log "set-attributes $attribute" -Color "blue"
+    Write-Log -Message "set-attributes $attribute" -Color "blue"
     if ($attribute -eq "j") {
         return @{ value="x"; display="Ja" }
     }
