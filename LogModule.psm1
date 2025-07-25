@@ -1,98 +1,124 @@
-# -----------------------------------------------------------------------
-# LogModule.psm1              Stand: 25 Jul 2025
-# – schreibt jede Zeile gleichzeitig
-#   • in den Primär‑Pfad  $global:AppConfig.Paths.LogPath     (UNC)
-#   • in den Fallback‑Pfad $env:TEMP\AddUser\AddUser_yyyyMMdd.log
-# – bricht niemals mit „‑Path $null“ ab
-# – GUI‑ und Job‑fähig
-# -----------------------------------------------------------------------
+<#  -----------------------------------------------------------------------
+    LogModule.psm1  –  BMU AddUser  (Stand 25 Jul 2025)
+    -----------------------------------------------------------------------
+    - Schreibt jede Logzeile gleichzeitig
+        1. in die zentrale Datei   $global:AppConfig.Paths.LogPath
+        2. in die lokale Datei     "$env:TEMP\AddUser_{yyyyMMdd}.log"
+    - Funktioniert in GUI-, Konsolen- und Job-Kontexten.
+    - Erstellt Zielordner automatisch; fällt niemals mit "-Path = $null".
+    - Öffentliche API:
+        Initialize-Logger   Stop-Logger
+        Write-Log (Alias: MyWrite-Log)
+        WriteJobLog
+        Get-LogPath    Get-TempLogPath
+        Get-FullLog    Clear-FullLog
+   -----------------------------------------------------------------------#>
 
-## interner Zustand
-$script:PrimaryLogFile   = $null
-$script:TempLogFile      = Join-Path $env:TEMP ("AddUser\AddUser_{0:yyyyMMdd}.log" -f (Get-Date))
-$script:WpfLogControl    = $null
-$script:LoggerReady      = $false
+#region -- private state
+$script:CentralLogFile = $null      # UNC / Fileshare
+$script:TempLogFile    = $null      # immer vorhanden
+$script:WpfLogControl  = $null
+$script:InJobContext   = $false
+#endregion
 
-## Hilfsfunktionen
-function Resolve-PrimaryLogPath {
-    if ($global:AppConfig -and $global:AppConfig.Paths.LogPath -is [string] -and $global:AppConfig.Paths.LogPath.Trim()) {
-        return $global:AppConfig.Paths.LogPath.Trim()
-    }
-    return $null
-}
-
-function Ensure-Directory {
-    param([string]$Path)
-    try {
-        $dir = Split-Path $Path -Parent
-        if ($dir -and -not (Test-Path -LiteralPath $dir)) {
-            New-Item -ItemType Directory -Path $dir -Force | Out-Null
-        }
-    } catch { }
-}
-
-function Write-ToLogFiles {
-    param([string]$Line)
-    # Primär
-    if ($script:PrimaryLogFile) {
-        try { $Line | Out-File -LiteralPath $script:PrimaryLogFile -Append -Encoding UTF8 } catch { }
-    }
-    # Temp (immer angelegt)
-    $Line | Out-File -LiteralPath $script:TempLogFile -Append -Encoding UTF8
-}
-
-## Öffentliche API
 function Initialize-Logger {
-    [CmdletBinding()]
-    param(
-        [System.Windows.Controls.RichTextBox]$RichTextBox,
-        [switch]$Append = $true
+    [CmdletBinding()] param(
+        [object] $WpfControl,
+        [switch] $InJob,
+        [switch] $Append   = $true
     )
-    # 1 Primär
-    $script:PrimaryLogFile = Resolve-PrimaryLogPath
-    if ($script:PrimaryLogFile) {
-        Ensure-Directory $script:PrimaryLogFile
-        if (-not $Append) { "" | Out-File $script:PrimaryLogFile -Encoding UTF8 }
+
+    # 1) Pfade ermitteln
+    $script:CentralLogFile = $null
+    if ($global:AppConfig -and $global:AppConfig.Paths.LogPath) {
+        $script:CentralLogFile = $global:AppConfig.Paths.LogPath.Trim()
     }
-    # 2 Temp
-    Ensure-Directory $script:TempLogFile
-    if (-not $Append) { "" | Out-File $script:TempLogFile -Encoding UTF8 }
-    # 3 GUI
-    $script:WpfLogControl = $RichTextBox
-    $script:LoggerReady   = $true
-    Write-Log "Logger initialisiert  → Primär='$script:PrimaryLogFile'  Temp='$script:TempLogFile'"
+    $script:TempLogFile = Join-Path $env:TEMP ("AddUser_{0:yyyyMMdd}.log" -f (Get-Date))
+
+    # 2) Ordner anlegen / Testschreiben
+    foreach ($file in @($script:CentralLogFile,$script:TempLogFile) | Where-Object { $_ }) {
+        try {
+            $dir = Split-Path $file -Parent
+            if (-not (Test-Path -LiteralPath $dir)) {
+                New-Item -ItemType Directory -Path $dir -Force | Out-Null
+            }
+            if (-not $Append) { "" | Out-File $file -Encoding UTF8 -Force }
+            elseif (-not (Test-Path $file)) { "" | Out-File $file -Encoding UTF8 }
+        } catch {
+            # Wenn die ZENTRALE Datei nicht erreichbar ist -> nur Temp.
+            if ($file -eq $script:CentralLogFile) { $script:CentralLogFile = $null }
+        }
+    }
+
+    $script:WpfLogControl = $WpfControl
+    $script:InJobContext  = $InJob.IsPresent
+
+    Write-Log "Logger initialisiert. Central='$script:CentralLogFile'; Temp='$script:TempLogFile'" INFO
+}
+
+function Stop-Logger {
+    Write-Log "Logger gestoppt." INFO
+    $script:CentralLogFile = $null
+    $script:TempLogFile    = $null
 }
 
 function Write-Log {
-    [CmdletBinding()] param(
+    param(
         [Parameter(Mandatory)][string]$Message,
-        [ValidateSet('INFO','WARN','ERROR','SUCCESS','DEBUG')] [string]$Level = 'INFO'
+        [ValidateSet('INFO','WARN','ERROR','SUCCESS','DEBUG')]
+        [string]$Category = 'INFO'
     )
-    if (-not $script:LoggerReady) { return }
-    $ts   = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-    $line = "[$ts] [$Level] $Message"
-    Write-ToLogFiles $line
-    # GUI optional
+
+    $stamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+    $line  = "[$stamp] [$Category] $Message"
+
+    # 1/2  Datei(en)
+    foreach ($f in @($script:CentralLogFile,$script:TempLogFile) | Where-Object { $_ }) {
+        try { $line | Out-File $f -Encoding UTF8 -Append } catch {}
+    }
+
+    # 2/2  GUI oder Host
     if ($script:WpfLogControl -and $script:WpfLogControl.Dispatcher) {
         try {
             $script:WpfLogControl.Dispatcher.Invoke([Action]{
-                $run = New-Object Windows.Documents.Run ($line + "`r`n")
-                switch ($Level) {
-                    'ERROR'   { $run.Foreground = [System.Windows.Media.Brushes]::Red }
-                    'SUCCESS' { $run.Foreground = [System.Windows.Media.Brushes]::Green }
-                    'WARN'    { $run.Foreground = [System.Windows.Media.Brushes]::Orange }
-                    'DEBUG'   { $run.Foreground = [System.Windows.Media.Brushes]::Gray }
-                    default   { $run.Foreground = [System.Windows.Media.Brushes]::Black }
+                $run        = New-Object Windows.Documents.Run($line + "`r`n")
+                $run.Foreground = switch ($Category) {
+                    'ERROR'   { [System.Windows.Media.Brushes]::Red }
+                    'SUCCESS' { [System.Windows.Media.Brushes]::Green }
+                    'WARN'    { [System.Windows.Media.Brushes]::Orange }
+                    'DEBUG'   { [System.Windows.Media.Brushes]::Gray }
+                    default   { [System.Windows.Media.Brushes]::Black }
                 }
-                $para = [Windows.Documents.Paragraph]::new($run)
-                $script:WpfLogControl.Document.Blocks.Add($para)
-                $script:WpfLogControl.ScrollToEnd()
+                $para = New-Object Windows.Documents.Paragraph($run)
+                $script:WpfLogControl.Document.Blocks.Add($para); $script:WpfLogControl.ScrollToEnd()
             })
-        } catch { }
+        } catch {}
+    } elseif (-not $script:InJobContext) {
+        Write-Host $line
+    }
+
+    # Hintergrund-Job -> Objekt zurückgeben
+    if ($script:InJobContext) {
+        [pscustomobject]@{ Timestamp=$stamp; Category=$Category; Message=$Message; LogLine=$line }
+    }
+}
+Set-Alias MyWrite-Log Write-Log -Scope Global
+
+function WriteJobLog { param([string]$msg,[string]$Category='INFO') Write-Log $msg $Category }
+
+function Get-LogPath     { $script:CentralLogFile }
+function Get-TempLogPath { $script:TempLogFile   }
+
+function Get-FullLog {
+    foreach ($f in @($script:CentralLogFile,$script:TempLogFile) | Where-Object { $_ -and (Test-Path $_) }) {
+        "=== $f ==="; Get-Content $f -Encoding UTF8
     }
 }
 
-function Get-LogPath     { $script:PrimaryLogFile }
-function Get-TempLogPath { $script:TempLogFile }
+function Clear-FullLog {
+    foreach ($f in @($script:CentralLogFile,$script:TempLogFile) | Where-Object { $_ -and (Test-Path $_) }) {
+        Clear-Content $f -ErrorAction SilentlyContinue
+    }
+}
 
-Export-ModuleMember -Function Initialize-Logger, Write-Log, Get-LogPath, Get-TempLogPath
+Export-ModuleMember -Function Initialize-Logger,Stop-Logger,Write-Log,MyWrite-Log,WriteJobLog,Get-LogPath,Get-TempLogPath,Get-FullLog,Clear-FullLog
