@@ -1,7 +1,7 @@
 # DatabaseModule.psm1
 function set-database {
     param([Parameter(Mandatory=$true)][string]$pathToFile)
-    MyWrite-Log "set-database: Prüfe $pathToFile" -Color "blue"
+    Write-Log -Message "set-database: PrÃ¼fe $pathToFile" -Color "blue"
     if (!(Test-Path $pathToFile)) {
         try {
             $XmlWriter = New-Object System.Xml.XmlTextWriter($pathToFile, $null)
@@ -13,11 +13,11 @@ function set-database {
             $XmlWriter.WriteEndDocument()
             $XmlWriter.Flush()
             $XmlWriter.Close()
-            MyWrite-Log "Datenbank angelegt: $pathToFile" -Color "green"
+            Write-Log -Message "Datenbank angelegt: $pathToFile" -Color "green"
             return $true
         }
         catch {
-            MyWrite-Log "Fehler set-database: $($_.Exception.Message)" -Color "red"
+            Write-Log -Message "Fehler set-database: $($_.Exception.Message)" -Color "red"
             return $false
         }
     }
@@ -26,7 +26,7 @@ function set-database {
 
 function check-Database {
     param([Parameter(Mandatory=$true)][string]$UserID)
-    MyWrite-Log "check-Database: Prüfe DB-Eintrag für $UserID" -Color "blue"
+    Write-Log -Message "check-Database: PrÃ¼fe DB-Eintrag fÃ¼r $UserID" -Color "blue"
     try {
         if (Test-Path $global:AppConfig.FilePath) {
             [xml]$doc = Get-Content $global:AppConfig.FilePath
@@ -36,7 +36,7 @@ function check-Database {
         }
     }
     catch {
-        MyWrite-Log "Fehler check-Database: $($_.Exception.Message)" -Color "red"
+        Write-Log -Message "Fehler check-Database: $($_.Exception.Message)" -Color "red"
         return $false
     }
     return $false
@@ -44,23 +44,23 @@ function check-Database {
 
 function delete-record {
     param([Parameter(Mandatory=$true)][string]$UserID)
-    MyWrite-Log "delete-record: Lösche $UserID in DB" -Color "blue"
+    Write-Log -Message "delete-record: LÃ¶sche $UserID in DB" -Color "blue"
     try {
         [xml]$doc = Get-Content $global:AppConfig.FilePath
         $users = $doc.SelectSingleNode("//User[translate(@ID, 'A-Z', 'a-z') = translate('$UserID', 'A-Z', 'a-z')]")
         if ($users) {
             [Void]$users.ParentNode.RemoveChild($users)
             $doc.Save($global:AppConfig.FilePath)
-            MyWrite-Log "Tupel $UserID gelöscht." -Color "green"
+            Write-Log -Message "Tupel $UserID gelÃ¶scht." -Color "green"
             return $true
         }
         else {
-            MyWrite-Log "Tupel $UserID nicht gefunden." -Color "red"
+            Write-Log -Message "Tupel $UserID nicht gefunden." -Color "red"
             return $false
         }
     }
     catch {
-        MyWrite-Log "Fehler delete-record: $($_.Exception.Message)" -Color "red"
+        Write-Log -Message "Fehler delete-record: $($_.Exception.Message)" -Color "red"
         return $false
     }
 }
@@ -70,7 +70,7 @@ function append-database {
         [Parameter(Mandatory=$true)]$userAttributes,
         [Parameter(Mandatory=$true)]$ticketNr
     )
-    MyWrite-Log "append-database: $($userAttributes.id)" -Color "blue"
+    Write-Log -Message "append-database: $($userAttributes.id)" -Color "blue"
     if (set-database -pathToFile $global:AppConfig.FilePath) {
         try {
             [xml]$doc = Get-Content $global:AppConfig.FilePath
@@ -88,11 +88,11 @@ function append-database {
 
             $doc.DocumentElement.AppendChild($user)
             $doc.Save($global:AppConfig.FilePath)
-            MyWrite-Log "Datensatz für $($userAttributes.id) angehängt." -Color "green"
+            Write-Log -Message "Datensatz fÃ¼r $($userAttributes.id) angehÃ¤ngt." -Color "green"
             return $true
         }
         catch {
-            MyWrite-Log "Fehler append-database: $($_.Exception.Message)" -Color "red"
+            Write-Log -Message "Fehler append-database: $($_.Exception.Message)" -Color "red"
             return $false
         }
     }
@@ -104,7 +104,7 @@ function write-XMLLog {
         [Parameter(Mandatory=$true)]$logUserAttributes,
         [Parameter(Mandatory=$true)]$ticketNr
     )
-    MyWrite-Log "write-XMLLog: $($logUserAttributes.id) - $ticketNr" -Color "blue"
+    Write-Log -Message "write-XMLLog: $($logUserAttributes.id) - $ticketNr" -Color "blue"
     if (set-database -pathToFile $global:AppConfig.XMLLogPath) {
         try {
             [xml]$logDoc = Get-Content $global:AppConfig.XMLLogPath
@@ -130,11 +130,11 @@ function write-XMLLog {
 
             $logDoc.DocumentElement.AppendChild($logUser)
             $logDoc.Save($global:AppConfig.XMLLogPath)
-            MyWrite-Log "write-XMLLog: Ticket $ticketNr eingetragen." -Color "green"
+            Write-Log -Message "write-XMLLog: Ticket $ticketNr eingetragen." -Color "green"
             return $true
         }
         catch {
-            MyWrite-Log "Fehler write-XMLLog: $($_.Exception.Message)" -Color "red"
+            Write-Log -Message "Fehler write-XMLLog: $($_.Exception.Message)" -Color "red"
             return $false
         }
     }

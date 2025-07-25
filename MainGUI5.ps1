@@ -25,6 +25,7 @@ Add-Type -AssemblyName System.Windows.Forms
 # Erstelle eine eigene WPF-Application-Instanz, falls nicht vorhanden
 if (-not [System.Windows.Application]::Current) {
 Import-Module "$Script:ToolRoot\LogModule.psm1" -Force
+Import-Module "$Script:ToolRoot\ConfigModule.psm1" -Force
 
     $app = New-Object System.Windows.Application
     $global:CustomApplication = $app
@@ -39,7 +40,7 @@ Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUse
 # Standard-Suchattribute für Gruppensuche
 $global:SearchAttributes = @("cn")
 
-# Importiere erforderliche Module
+# Importiere Module NACH dem Logger, damit sie Write-Log verwenden können
 foreach ($module in $global:AppConfig.Modules) {
     $modulePath = $module
     if (Test-Path $modulePath) {
@@ -299,10 +300,7 @@ $txtRefUser.ToolTip     = "Referenz-Benutzer (z. B. für Gruppenkopie)"
 $lstGroups.ToolTip      = "Zusätzliche AD-Gruppen (per Suche hinzufügen)"
 $btnSearchGroups.ToolTip= "Gruppen basierend auf Department suchen"
 Initialize-Logger -WpfControl $txtLog
-
-# Globale Variable für Log-Control setzen
-#$global:WpfLogControl = $txtLog
-#I#nitialize-Logger -RichTextBox $txtLog
+# $global:WpfLogControl wird nicht mehr benötigt – Logger kümmert sich selbst
 
 
 # Lade das Logo
@@ -543,7 +541,7 @@ function Start-UserCreationRunspace {
     )
     $runspace = [RunspaceFactory]::CreateRunspace()
     $runspace.Open()
-    $runspace.SessionStateProxy.SetVariable("global:WpfLogControl", $txtLog)
+
 
     $psInstance = [PowerShell]::Create()
     $psInstance.Runspace = $runspace
@@ -563,6 +561,7 @@ function Start-UserCreationRunspace {
 
 
 Import-Module "$params.ToolRoot\LogModule.psm1" -Force
+Import-Module "$params.ToolRoot\ConfigModule.psm1" -Force
 Initialize-Logger -InJob
         foreach ($module in $modules) {
             Import-Module $module -Force -ErrorAction SilentlyContinue

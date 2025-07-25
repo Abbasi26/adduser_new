@@ -35,7 +35,7 @@ function create-FolderStructure {
         [Parameter(Mandatory=$true)][string]$Site
     )
 
-    MyWrite-Log "Erstelle Ordnerstruktur für Benutzer $UserID (@$Site)" -Color "blue"
+    Write-Log -Message "Erstelle Ordnerstruktur für Benutzer $UserID (@$Site)" -Color "blue"
 
     if ($Site -eq "RSP") {
         $fileServerShare = "RSPSVFIL01.office.dir"
@@ -73,7 +73,7 @@ function create-FolderStructure {
     if (!(Test-Path "$UserDataFolder\Videos"))     { mkdir "$UserDataFolder\Videos"     | Out-Null }
     if (!(Test-Path "$UserDataFolder\Application Data")) { mkdir "$UserDataFolder\Application Data" | Out-Null }
 
-    MyWrite-Log "Ordner erstellt für $UserID." -Color "green"
+    Write-Log -Message "Ordner erstellt für $UserID." -Color "green"
 
     # DFS-Verlinkung herstellen
     $DfsNameSpaceBenutzer = "\\office.dir\Benutzer$"
@@ -93,7 +93,7 @@ function create-FolderStructure {
     }
     & $dfsUtil link add "$DfsNameSpaceDFS\$UserID" "$DfsNameSpaceBenutzer\$UserID" | Out-Null
 
-    MyWrite-Log "DFS-Links erstellt für $UserID." -Color "green"
+    Write-Log -Message "DFS-Links erstellt für $UserID." -Color "green"
 
     $site1 = $site+"SVFIL01"
     # (Achtung: Pfad hier ggf. anpassen, falls es den wirklich so gibt)
@@ -107,7 +107,7 @@ function set-FilePermissions {
         [Parameter(Mandatory=$true)][string]$Site
     )
 
-    MyWrite-Log "Starte set-FilePermissions (asynchron) für $UserID @ $Site" -Color "blue"
+    Write-Log -Message "Starte set-FilePermissions (asynchron) für $UserID @ $Site" -Color "blue"
     
     # Wir starten einen Job, damit das Setzen der Rechte im Hintergrund läuft:
     $job = Start-Job -ScriptBlock {
@@ -164,7 +164,7 @@ function set-FolderOwnership {
         [Parameter(Mandatory=$true)][string]$Site
     )
 
-    MyWrite-Log "Setze Ownership & DFS-Berechtigung (synchron) für $UserID @ $Site" -Color "blue"
+    Write-Log -Message "Setze Ownership & DFS-Berechtigung (synchron) für $UserID @ $Site" -Color "blue"
 
     $DfsNameSpaceDFS       = "\\office.dir\Files\Benutzer"
     $FileServiceAdminGroup = "SG-Fileservices-Admins"
@@ -180,7 +180,7 @@ function set-FolderOwnership {
     & $dfsUtil Property SD Grant   "$DfsNameSpaceDFS\$UserID" "$FileServiceAdminGroup:M"
     & $dfsUtil Property SD Grant   "$DfsNameSpaceDFS\$UserID" "$FileServiceBmuvMa:M"
 
-    MyWrite-Log "Ownership + DFS-Berechtigungen gesetzt (synchron) für $UserID." -Color "green"
+    Write-Log -Message "Ownership + DFS-Berechtigungen gesetzt (synchron) für $UserID." -Color "green"
 }
 
 Export-ModuleMember -Function create-FolderStructure, set-FilePermissions, set-FolderOwnership

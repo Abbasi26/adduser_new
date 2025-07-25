@@ -16,7 +16,7 @@ function Create-Mailbox {
     )
 
     if ($LogTextbox) {
-        MyWrite-Log "Starte Create-Mailbox: Site=$site, extern=$extern, hidden=$hiddenFromAddressLists, externAccount=$externAccount" -Color "blue" -LogTextbox $LogTextbox
+        Write-Log -Message "Starte Create-Mailbox: Site=$site, extern=$extern, hidden=$hiddenFromAddressLists, externAccount=$externAccount" -Color "blue" -LogTextbox $LogTextbox
     }
 
     try {
@@ -27,7 +27,7 @@ function Create-Mailbox {
     }
     catch {
         if ($LogTextbox) {
-            MyWrite-Log "FEHLER: Fehler beim Herstellen der Exchange-Session: $($_.Exception.Message)" -Color "red" -LogTextbox $LogTextbox
+            Write-Log -Message "FEHLER: Fehler beim Herstellen der Exchange-Session: $($_.Exception.Message)" -Color "red" -LogTextbox $LogTextbox
         }
         return
     }
@@ -40,7 +40,7 @@ function Create-Mailbox {
             if ($externAccount) {
                 Set-ADUser -Identity $samAccountName -Add @{ extensionAttribute11="x" } -ErrorAction Stop
                 if ($LogTextbox) {
-                    MyWrite-Log "extensionAttribute11 wurde für $samAccountName auf x gesetzt (Extern Account)." -Color "green" -LogTextbox $LogTextbox
+                    Write-Log -Message "extensionAttribute11 wurde fÃ¼r $samAccountName auf x gesetzt (Extern Account)." -Color "green" -LogTextbox $LogTextbox
                 }
             }
 
@@ -51,7 +51,7 @@ function Create-Mailbox {
             }
 
             if ($LogTextbox) {
-                MyWrite-Log "Suche Mailbox-Datenbank für $($samAccountName) (Site=$site)" -Color "blue" -LogTextbox $LogTextbox
+                Write-Log -Message "Suche Mailbox-Datenbank fÃ¼r $($samAccountName) (Site=$site)" -Color "blue" -LogTextbox $LogTextbox
             }
 
             $mailboxSite = "$site" + "DB*"
@@ -59,7 +59,7 @@ function Create-Mailbox {
 
             if (-not $mailboxDatabases) {
                 if ($LogTextbox) {
-                    MyWrite-Log "KEINE passende Mailbox-Datenbank gefunden für $($samAccountName). Muster=$mailboxSite" -Color "red" -LogTextbox $LogTextbox
+                    Write-Log -Message "KEINE passende Mailbox-Datenbank gefunden fÃ¼r $($samAccountName). Muster=$mailboxSite" -Color "red" -LogTextbox $LogTextbox
                 }
                 continue
             }
@@ -76,7 +76,7 @@ function Create-Mailbox {
             $userMailBoxDB = $dbFreeSpaces | Sort-Object AvailableNewMailboxSpace -Descending | Select-Object -First 1
             if (-not $userMailBoxDB) {
                 if ($LogTextbox) {
-                    MyWrite-Log "Keine geeignete Mailbox-Datenbank gefunden für $($samAccountName)." -Color "red" -LogTextbox $LogTextbox
+                    Write-Log -Message "Keine geeignete Mailbox-Datenbank gefunden fÃ¼r $($samAccountName)." -Color "red" -LogTextbox $LogTextbox
                 }
                 continue
             }
@@ -84,7 +84,7 @@ function Create-Mailbox {
             $archiveDbName = ($userMailBoxDB.Name -replace '^([A-Za-z]+)DB','${1}ADB')
 
             if ($LogTextbox) {
-                MyWrite-Log "Primäre DB: $($userMailBoxDB.Name), Archiv-DB: $archiveDbName" -Color "green" -LogTextbox $LogTextbox
+                Write-Log -Message "PrimÃ¤re DB: $($userMailBoxDB.Name), Archiv-DB: $archiveDbName" -Color "green" -LogTextbox $LogTextbox
             }
 
             Enable-Mailbox -Identity $dn `
@@ -108,12 +108,12 @@ function Create-Mailbox {
             }
 
             if ($LogTextbox) {
-                MyWrite-Log "Mailbox erstellt: $($samAccountName), DB=$($userMailBoxDB.Name), Archiv=$archiveDbName" -Color "green" -LogTextbox $LogTextbox
+                Write-Log -Message "Mailbox erstellt: $($samAccountName), DB=$($userMailBoxDB.Name), Archiv=$archiveDbName" -Color "green" -LogTextbox $LogTextbox
             }
         }
         catch {
             if ($LogTextbox) {
-                MyWrite-Log "FEHLER bei $($samAccountName): $($_.Exception.Message)" -Color "red" -LogTextbox $LogTextbox
+                Write-Log -Message "FEHLER bei $($samAccountName): $($_.Exception.Message)" -Color "red" -LogTextbox $LogTextbox
             }
         }
     }
