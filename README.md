@@ -40,13 +40,13 @@ nutzen – der bestehende Code ändert sich dadurch nicht.
 ## Tests
 
 ```powershell
-pwsh -f scripts\Invoke-Tests.ps1
+powershell -File scripts\Invoke-Tests.ps1
 ```
 
 ## EXE bauen (optional, ohne Funktionalitätsänderung)
 
 ```powershell
-pwsh -f scripts\build.ps1
+powershell -File scripts\build.ps1
 ```
 
 Ergebnis: `dist\AddUserGUI.exe` (+ Payload-Ordner).

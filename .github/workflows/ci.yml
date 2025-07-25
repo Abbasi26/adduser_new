@@ -3,11 +3,17 @@ on:
   push:
   pull_request:
 jobs:
-  pester:
+  build-test:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run Pester
-        shell: pwsh
+
+      #   ---------- TESTS ----------
+      - name: Pester-Tests & Linting
+        shell: powershell
         run: |
-          pwsh -f scripts/Invoke-Tests.ps1
+          # Fail fast
+          $ErrorActionPreference = 'Stop'
+
+          # Starte alle Unit-Tests
+          Invoke-Pester -Path .\tests -EnableExit
