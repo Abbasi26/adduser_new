@@ -24,6 +24,8 @@ Add-Type -AssemblyName System.Windows.Forms
 
 # Erstelle eine eigene WPF-Application-Instanz, falls nicht vorhanden
 if (-not [System.Windows.Application]::Current) {
+ Import-Module "$PSScriptRoot\LogModule.psm1" -Force
+
     $app = New-Object System.Windows.Application
     $global:CustomApplication = $app
 }
@@ -298,7 +300,9 @@ $lstGroups.ToolTip      = "Zusätzliche AD-Gruppen (per Suche hinzufügen)"
 $btnSearchGroups.ToolTip= "Gruppen basierend auf Department suchen"
 
 # Globale Variable für Log-Control setzen
-$global:WpfLogControl = $txtLog
+$#global:WpfLogControl = $txtLog
+Initialize-Logger -RichTextBox $txtLog
+
 
 # Lade das Logo
 $imgPath = "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\ToolBox\Res\BMUV_logo.jpg"
@@ -554,6 +558,11 @@ function Start-UserCreationRunspace {
             "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\FolderStructureModule.psm1",
             "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\MailboxModule.psm1"
         )
+                    # Initialize logger in runspace
+                Initialize-Logger
+
+
+
         foreach ($module in $modules) {
             Import-Module $module -Force -ErrorAction SilentlyContinue
         }
