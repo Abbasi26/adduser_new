@@ -1,4 +1,9 @@
 ﻿#region Initialisierung und Imports
+param(
+    [string]$ConfigPath,
+    [string]$ConfigDir
+)
+
 # ------------------------------------------------#
 # 1) Initialisierung
 # ------------------------------------------------#
@@ -32,9 +37,19 @@ Import-Module "$Script:ToolRoot\ConfigModule.psm1" -Force
 }
 
 # Lade die Konfiguration einmal über das ConfigModule (cacht intern)
-$global:AppConfig = Get-AppConfig
-# StdProfiles werden weiter aus der separaten Datei geladen
-$global:StdProfiles = Get-Content "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\stdprofiles.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+try {
+    if ($ConfigPath) {
+        $global:AppConfig = Get-AppConfig -Path $ConfigPath
+    } elseif ($ConfigDir) {
+        $global:AppConfig = Get-AppConfig -Path (Join-Path $ConfigDir 'config.json')
+    } else {
+        $global:AppConfig = Get-AppConfig
+    }
+} catch {
+    Write-Host "FEHLER beim Laden der Config: $($_.Exception.Message)"
+    throw
+}
+$global:StdProfiles = Get-Content (Join-Path $PSScriptRoot 'config\stdprofiles.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 # Importiere Mailbox und Profile Module separat (falls nicht über $global:AppConfig.Modules abgedeckt)
 Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\MailboxModule.psm1"
 Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\ProfileModule.psm1"
