@@ -67,6 +67,9 @@ function ProcessUserCreation {
         [switch]$InJob,                                     # Hintergundmodus (z. B. per Scheduled Job)
         [scriptblock]$ProgressCallback                      # Fortschrittsrückruf-Funktion
     )
+    if (-not $global:AppConfig) {
+        throw 'Globales AppConfig-Objekt nicht initialisiert – Abbruch!'
+    }
     # Prüfe, ob ein Aktivierungsdatum gesetzt wurde (und nicht "S" für sofort)
     #$useDelayedActivation = $false
     #if ($EntryDate -and $EntryDate -ne "S") {
