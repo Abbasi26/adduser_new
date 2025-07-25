@@ -55,7 +55,24 @@ Ergebnis: `dist\AddUserGUI.exe` (+ Payload-Ordner).
 
 Der Workflow `.github/workflows/ci.yml` läuft Pester bei jedem Push/PR.
 
-## Pfade/Config
+## Pfade/Config (konfigurierbar)
 
-Die existierende Config/Pfad-Logik bleibt wie sie ist (UNC-Pfade etc.).  
-Wenn du später dynamischere Pfadauflösung willst, können wir das separat **ohne** Änderung der jetzt gelieferten Struktur einbauen (z.B. per Env‑Vars, CLI‑Param oder auto-resolve relativ zur EXE).
+Du kannst den Pfad zur `config.json` jetzt **frei (UNC eingeschlossen)** vorgeben:
+
+**Priorität:**
+1. **Parameter** an `MainGUI5.ps1` / EXE:
+   - `-ConfigPath "UNC\oder\lokal\config.json"`
+   - `-ConfigDir "\\server\share\folder"`
+2. **Umgebungsvariablen**:
+   - `ADDUSER_CONFIG_PATH`
+   - `ADDUSER_CONFIG_DIR`
+3. **Fallback**: automatisch relativ zur EXE/Repo (`dist\config\config.json` bzw. `<repo>\config\config.json`)
+
+Beispiele:
+
+```powershell
+.\MainGUI5.ps1 -ConfigPath "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\config.json"
+
+$env:ADDUSER_CONFIG_PATH="\\srv\share\cfg\config.json"
+.\MainGUI5.ps1
+```
