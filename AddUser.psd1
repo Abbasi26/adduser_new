@@ -11,4 +11,5 @@
     CmdletsToExport   = @()
     VariablesToExport = '*'
     AliasesToExport   = '*'
+    RequiredModules   = @('Configuration')
 }

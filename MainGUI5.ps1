@@ -4,6 +4,8 @@ param(
     [string]$ConfigDir
 )
 
+Import-Module "$PSScriptRoot\Configuration.psm1" -Force
+
 # ------------------------------------------------#
 # 1) Initialisierung
 # ------------------------------------------------#
@@ -29,8 +31,8 @@ Add-Type -AssemblyName System.Windows.Forms
 
 # Erstelle eine eigene WPF-Application-Instanz, falls nicht vorhanden
 if (-not [System.Windows.Application]::Current) {
-Import-Module "$Script:ToolRoot\LogModule.psm1" -Force
-Import-Module "$Script:ToolRoot\ConfigModule.psm1" -Force
+Import-Module (Join-Path (Get-Path ToolRoot) 'LogModule.psm1') -Force
+Import-Module (Join-Path (Get-Path ToolRoot) 'ConfigModule.psm1') -Force
 
     $app = New-Object System.Windows.Application
     $global:CustomApplication = $app
@@ -49,10 +51,15 @@ try {
     Write-Host "FEHLER beim Laden der Config: $($_.Exception.Message)"
     throw
 }
+
+# migrate old config → new Config hashtable so both styles work
+foreach ($k in $global:AppConfig.Paths.Keys) {
+    if (-not $Config.ContainsKey($k)) { $Config[$k] = $global:AppConfig.Paths[$k] }
+}
 $global:StdProfiles = Get-Content (Join-Path $PSScriptRoot 'config\stdprofiles.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 # Importiere Mailbox und Profile Module separat (falls nicht über $global:AppConfig.Modules abgedeckt)
-Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\MailboxModule.psm1"
-Import-Module "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\ProfileModule.psm1"
+Import-Module (Join-Path (Get-Path ToolRoot) 'MailboxModule.psm1')
+Import-Module (Join-Path (Get-Path ToolRoot) 'ProfileModule.psm1')
 
 # Standard-Suchattribute für Gruppensuche
 $global:SearchAttributes = @("cn")
@@ -321,7 +328,7 @@ Initialize-Logger -WpfControl $txtLog
 
 
 # Lade das Logo
-$imgPath = "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\ToolBox\Res\BMUV_logo.jpg"
+$imgPath = Get-Path LogoPath
 if (Test-Path $imgPath) {
     $bitmap = New-Object System.Windows.Media.Imaging.BitmapImage
     $bitmap.BeginInit()
@@ -565,20 +572,21 @@ function Start-UserCreationRunspace {
 
     $scriptBlock = {
         param($params)
+        $root = Get-Path ToolRoot
         $modules = @(
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\ADUserCreationModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\UserCreationLogic2.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\AttributeModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\LogModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\DatabaseModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\FolderStructureModule.psm1",
-            "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v22\MailboxModule.psm1"
+            (Join-Path $root 'ADUserCreationModule.psm1'),
+            (Join-Path $root 'UserCreationLogic2.psm1'),
+            (Join-Path $root 'AttributeModule.psm1'),
+            (Join-Path $root 'LogModule.psm1'),
+            (Join-Path $root 'DatabaseModule.psm1'),
+            (Join-Path $root 'FolderStructureModule.psm1'),
+            (Join-Path $root 'MailboxModule.psm1')
         )
                     # Initialize logger in runspace
 
 
-Import-Module "$params.ToolRoot\LogModule.psm1" -Force
-Import-Module "$params.ToolRoot\ConfigModule.psm1" -Force
+Import-Module (Join-Path (Get-Path ToolRoot) 'LogModule.psm1') -Force
+Import-Module (Join-Path (Get-Path ToolRoot) 'ConfigModule.psm1') -Force
 Initialize-Logger -InJob
         foreach ($module in $modules) {
             Import-Module $module -Force -ErrorAction SilentlyContinue

@@ -1,4 +1,6 @@
 # MailboxModule.psm1
+Import-Module "$PSScriptRoot\Configuration.psm1" -Force
+
 function Create-Mailbox {
     [CmdletBinding()]
     param(
@@ -21,7 +23,7 @@ function Create-Mailbox {
 
     try {
         $exchangeSession = New-PSSession -ConfigurationName Microsoft.Exchange `
-                                         -ConnectionUri "http://rspsvexch12.office.dir/PowerShell/" `
+                                         -ConnectionUri (Get-Path ExchangePSSessionUri) `
                                          -Authentication Kerberos
         Import-PSSession $exchangeSession -ErrorAction Stop
     }
@@ -90,7 +92,7 @@ function Create-Mailbox {
             Enable-Mailbox -Identity $dn `
                            -Alias $samAccountName `
                            -Database $userMailBoxDB.Name `
-                           -RetentionPolicy 'BMU Benutzerpostfach Archivierungsrichtlinie' `
+                           -RetentionPolicy (Get-Path RetentionPolicy) `
                            -ErrorAction Stop
 
             Enable-Mailbox -Identity $dn `
