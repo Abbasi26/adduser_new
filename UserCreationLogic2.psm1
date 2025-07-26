@@ -1,3 +1,5 @@
+# Import central configuration
+Import-Module "$PSScriptRoot\Configuration.psm1" -Force
 ﻿
 
 # ------------------------------------------------
@@ -364,11 +366,11 @@ function ProcessUserCreation {
         # Wähle je nach Standort den Dateiserver und den Pfad
         if ($Site -eq "RSP") {
             $RGPrefix = "RG-FIL-RSPSVFIL02_"
-            $resPath  = "\\RSPSVFIL02\E$\Freigaben\OrgDataRSP\$convertedDept\$UserID"
+            $resPath  = (Join-Path (Get-Path OrgDataRSP) "$convertedDept\$UserID")
         }
         else {
             $RGPrefix = "RG-FIL-STRSVFIL02_"
-            $resPath  = "\\STRSVFIL02\E$\Freigaben\OrgDataSTR\$convertedDept\$UserID"
+            $resPath  = (Join-Path (Get-Path OrgDataSTR) "$convertedDept\$UserID")
         }
         $gruppeName = $RGPrefix + $convertedDept + "_" + $UserID + "_RWXD"
 
@@ -416,11 +418,11 @@ function ProcessUserCreation {
         $convertedDept = Convert-DepartmentShort $Department
         if ($Site -eq "RSP") {
             $RGPrefix = "RG-FIL-RSPSVFIL02_"
-            $resPath  = "\\RSPSVFIL02\E$\Freigaben\OrgDataRSP\$convertedDept\$UserID"
+            $resPath  = (Join-Path (Get-Path OrgDataRSP) "$convertedDept\$UserID")
         }
         else {
             $RGPrefix = "RG-FIL-STRSVFIL02_"
-            $resPath  = "\\STRSVFIL02\E$\Freigaben\OrgDataSTR\$convertedDept\$UserID"
+            $resPath  = (Join-Path (Get-Path OrgDataSTR) "$convertedDept\$UserID")
         }
         $abgGruppe = $RGPrefix + $convertedDept + "_" + $UserID + "_RWXD"
 
@@ -472,7 +474,7 @@ function ProcessUserCreation {
 
     if ($Department -and $Department.Trim() -ne "") {
         # Beispiel: ReferatVerteiler.json auslesen (Pfad anpassen!)
-        $referatVerteilerPath = "\\office.dir\files\ORG\OrgDATA\IT-BMU\03_Tools\AddUser-GUI\AddUser_v5\ReferatVerteiler.json"
+        $referatVerteilerPath = Get-Path ReferatVerteilerJson
         if (Test-Path $referatVerteilerPath) {
             try {
                 $referatVerteiler = Get-Content -Path $referatVerteilerPath -Raw | ConvertFrom-Json
@@ -608,7 +610,6 @@ function ProcessUserCreation {
     # Ownership & DFS-Berechtigung
     WriteJobLog "Ownership & DFS-Berechtigung für $UserID @ $Site"
     set-FolderOwnership -UserID $UserID -Site $Site
-
 
 
     # Schritt 17: AD-Objekt in die richtige OU verschieben

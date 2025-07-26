@@ -6,13 +6,15 @@
         2. in die lokale Datei     "$env:TEMP\AddUser_{yyyyMMdd}.log"
     - Funktioniert in GUI-, Konsolen- und Job-Kontexten.
     - Erstellt Zielordner automatisch; fällt niemals mit "-Path = $null".
-    - Öffentliche API:
+   - Öffentliche API:
         Initialize-Logger   Stop-Logger
         Write-Log (Alias: MyWrite-Log)
         WriteJobLog
         Get-LogPath    Get-TempLogPath
         Get-FullLog    Clear-FullLog
    -----------------------------------------------------------------------#>
+
+Import-Module "$PSScriptRoot\Configuration.psm1" -Force
 
 #region -- private state
 $script:CentralLogFile = $null      # UNC / Fileshare
@@ -30,8 +32,12 @@ function Initialize-Logger {
 
     # 1) Pfade ermitteln
     $script:CentralLogFile = $null
-    if ($global:AppConfig -and $global:AppConfig.Paths.LogPath) {
-        $script:CentralLogFile = $global:AppConfig.Paths.LogPath.Trim()
+    try {
+        $script:CentralLogFile = Get-Path ActivateAccountLog
+    } catch {
+        if ($global:AppConfig -and $global:AppConfig.Paths.LogPath) {
+            $script:CentralLogFile = $global:AppConfig.Paths.LogPath.Trim()
+        }
     }
     $script:TempLogFile = Join-Path $env:TEMP ("AddUser_{0:yyyyMMdd}.log" -f (Get-Date))
 
